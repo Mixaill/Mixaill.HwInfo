@@ -8,6 +8,8 @@ namespace Mixaill.SetupApi.Demo
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Mixaill.SetupApi.Demo v0.2\n\n");
+
             var deviceInfoSet = new DeviceInfoSet(DeviceClassGuid.Display);
             
             foreach(var deviceInfo in deviceInfoSet.Devices)
@@ -39,7 +41,7 @@ namespace Mixaill.SetupApi.Demo
 
 
                 var deviceInfoPci = deviceInfo as DeviceInfoPci;
-                if(deviceInfoPci != null)
+                if (deviceInfoPci != null)
                 {
                     Console.WriteLine($"Pci_LinkSpeed_Current     : {deviceInfoPci.PciLinkSpeedCurrent}");
                     Console.WriteLine($"Pci_LinkSpeed_Max         : {deviceInfoPci.PciLinkSpeedMax}");
@@ -52,10 +54,22 @@ namespace Mixaill.SetupApi.Demo
                     Console.WriteLine($"   - Mem_Prefetch_disable > {deviceInfoPci.PciBarTypes_NonPrefetchable}");
                     Console.WriteLine($"   - Mem_Prefetch_32bit   > {deviceInfoPci.PciBarTypes_32BitPrefetchable}");
                     Console.WriteLine($"   - Mem_Prefetch_64bit   > {deviceInfoPci.PciBarTypes_64BitPrefetchable} <-------- Re-sizable BAR");
+                    Console.WriteLine("");
+
+                    Console.WriteLine($"Pci_Above4G_Decoding      : {deviceInfoPci.Pci_Above4GDecoding}");
+                    Console.WriteLine($"Pci_LargeMemory           : {deviceInfoPci.Pci_LargeMemory}");
+                    Console.WriteLine("");
+                }
+
+                Console.WriteLine($"Device_ResourceMemory     v");
+                foreach (var resource in deviceInfo.DeviceResourceMemory)
+                {
+                    Console.WriteLine($"                          > {resource}");
                 }
 
                 Console.WriteLine("\n---------------\n");
             }
+
 
             deviceInfoSet.Dispose();
 

@@ -1,8 +1,22 @@
-﻿SetupDiDestroyDeviceInfoList
+﻿// Global/Defines
+INVALID_HANDLE_VALUE
+
+// DevInst/Functions
+CM_Get_First_Log_Conf
+CM_Get_Next_Res_Des
+CM_Get_Res_Des_Data
+CM_Get_Res_Des_Data_Size
+CM_Free_Log_Conf 
+CM_Free_Res_Des_Handle
+SetupDiDestroyDeviceInfoList
 SetupDiGetClassDevsW
 SetupDiGetDeviceProperty
 SetupDiEnumDeviceInfo
 
+// DevInst/Structures
+MEM_RESOURCE
+Mem_Large_Resource_s
 SP_DEVINFO_DATA
 
-INVALID_HANDLE_VALUE
+// DevInst/Defines
+ALLOC_LOG_CONF
