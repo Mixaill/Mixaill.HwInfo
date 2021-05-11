@@ -1,0 +1,8 @@
+﻿SetupDiDestroyDeviceInfoList
+SetupDiGetClassDevsW
+SetupDiGetDeviceProperty
+SetupDiEnumDeviceInfo
+
+SP_DEVINFO_DATA
+
+INVALID_HANDLE_VALUE
