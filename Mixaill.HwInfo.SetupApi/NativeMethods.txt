@@ -6,7 +6,7 @@ CM_Get_First_Log_Conf
 CM_Get_Next_Res_Des
 CM_Get_Res_Des_Data
 CM_Get_Res_Des_Data_Size
-CM_Free_Log_Conf 
+CM_Free_Log_Conf_Handle 
 CM_Free_Res_Des_Handle
 SetupDiDestroyDeviceInfoList
 SetupDiGetClassDevsW

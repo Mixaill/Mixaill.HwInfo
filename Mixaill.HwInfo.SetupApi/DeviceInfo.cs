@@ -121,7 +121,7 @@ namespace Mixaill.HwInfo.SetupApi
                 }
 
                 PInvoke.CM_Free_Res_Des_Handle(resourceDescriptor);
-                PInvoke.CM_Free_Log_Conf(logicalConfiguration, 0);
+                PInvoke.CM_Free_Log_Conf_Handle(logicalConfiguration);
             }
             else if (result != CONFIGRET.CR_NO_MORE_LOG_CONF)
             {
