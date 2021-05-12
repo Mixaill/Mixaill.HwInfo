@@ -3,9 +3,10 @@
 
 using System;
 using System.Reflection;
-using Mixaill.SetupApi.Defines;
 
-namespace Mixaill.SetupApi.Demo
+using Mixaill.HwInfo.SetupApi.Defines;
+
+namespace Mixaill.HwInfo.SetupApi.Demo
 {
     class Program
     {

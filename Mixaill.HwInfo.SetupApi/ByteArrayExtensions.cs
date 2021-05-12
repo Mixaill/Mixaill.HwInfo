@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mixaill.SetupApi
+namespace Mixaill.HwInfo.SetupApi
 {
     internal static class ByteArrayExtensions
     {

@@ -7,9 +7,9 @@ using System.ComponentModel;
 
 using Microsoft.Windows.Sdk;
 
-using Mixaill.SetupApi.Defines;
+using Mixaill.HwInfo.SetupApi.Defines;
 
-namespace Mixaill.SetupApi
+namespace Mixaill.HwInfo.SetupApi
 {
     public unsafe class DeviceInfoSet : IDisposable
     {

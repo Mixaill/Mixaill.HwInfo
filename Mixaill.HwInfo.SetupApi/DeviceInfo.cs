@@ -9,9 +9,9 @@ using System.Runtime.InteropServices;
 
 using Microsoft.Windows.Sdk;
 
-using Mixaill.SetupApi.Defines;
+using Mixaill.HwInfo.SetupApi.Defines;
 
-namespace Mixaill.SetupApi
+namespace Mixaill.HwInfo.SetupApi
 {
     public class DeviceInfo
     {

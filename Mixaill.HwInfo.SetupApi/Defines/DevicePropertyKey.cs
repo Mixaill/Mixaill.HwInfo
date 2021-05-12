@@ -5,7 +5,7 @@ using System;
 
 using Microsoft.Windows.Sdk;
 
-namespace Mixaill.SetupApi.Defines
+namespace Mixaill.HwInfo.SetupApi.Defines
 {
     internal static class DevicePropertyKey
     {

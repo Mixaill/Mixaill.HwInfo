@@ -3,9 +3,9 @@
 
 using System;
 
-using Mixaill.SetupApi.Defines;
+using Mixaill.HwInfo.SetupApi.Defines;
 
-namespace Mixaill.SetupApi
+namespace Mixaill.HwInfo.SetupApi
 {
     public class DeviceResourceMemory
     {

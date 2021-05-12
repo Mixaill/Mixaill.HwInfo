@@ -1,7 +1,7 @@
 ﻿// Copyright 2021, Mikhail Paulyshka
 // SPDX-License-Identifier: MIT
 
-namespace Mixaill.SetupApi.Defines
+namespace Mixaill.HwInfo.SetupApi.Defines
 {
     enum DevicePropertyTypeModifier
     {

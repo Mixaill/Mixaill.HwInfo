@@ -5,9 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using Mixaill.SetupApi.Defines;
+using Mixaill.HwInfo.SetupApi.Defines;
 
-namespace Mixaill.SetupApi
+namespace Mixaill.HwInfo.SetupApi
 {
     public class DevicePropertyValue
     {

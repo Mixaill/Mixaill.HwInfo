@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Mixaill.SetupApi.Defines
+namespace Mixaill.HwInfo.SetupApi.Defines
 {
     public static class DeviceClassGuid
     {
