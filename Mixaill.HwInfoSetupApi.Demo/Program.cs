@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 using System;
-
+using System.Reflection;
 using Mixaill.SetupApi.Defines;
 
 namespace Mixaill.SetupApi.Demo
@@ -11,7 +11,7 @@ namespace Mixaill.SetupApi.Demo
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Mixaill.SetupApi.Demo v0.2\n\n");
+            Console.WriteLine($"Mixaill.SetupApi.Demo v{Assembly.GetEntryAssembly().GetName().Version}\n\n");
 
             var deviceInfoSet = new DeviceInfoSet(DeviceClassGuid.Display);
             
