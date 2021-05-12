@@ -1,4 +1,6 @@
-# Mixaill.SetupApi
+# Mixaill.HwInfo
+
+## Mixaill.HwInfo.SetupApi
 
 A little wrapper for Windows SetupAPI for .NET
 

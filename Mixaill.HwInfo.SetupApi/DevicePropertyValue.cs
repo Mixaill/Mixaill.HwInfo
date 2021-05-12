@@ -24,7 +24,7 @@ namespace Mixaill.SetupApi
 
         public DevicePropertyValueUInt32(DevicePropertyType type, byte[] data) : base(type)
         {
-            Value = BitConverter.ToUInt32(data);
+            Value = BitConverter.ToUInt32(data, 0);
         }
     }
 

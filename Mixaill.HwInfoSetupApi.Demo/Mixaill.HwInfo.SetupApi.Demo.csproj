@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mixaill.SetupApi\Mixaill.SetupApi.csproj" />
+    <ProjectReference Include="..\Mixaill.HwInfo.SetupApi\Mixaill.HwInfo.SetupApi.csproj" />
   </ItemGroup>
 
 </Project>
