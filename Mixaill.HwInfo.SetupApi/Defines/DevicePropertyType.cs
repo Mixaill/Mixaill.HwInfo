@@ -1,4 +1,7 @@
-﻿namespace Mixaill.SetupApi.Defines
+﻿// Copyright 2021, Mikhail Paulyshka
+// SPDX-License-Identifier: MIT
+
+namespace Mixaill.SetupApi.Defines
 {
     public enum DevicePropertyType
     {

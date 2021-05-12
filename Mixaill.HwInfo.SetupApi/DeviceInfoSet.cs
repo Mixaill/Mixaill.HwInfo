@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright 2021, Mikhail Paulyshka
+// SPDX-License-Identifier: MIT
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 

@@ -1,11 +1,15 @@
-﻿using Microsoft.Windows.Sdk;
+﻿// Copyright 2021, Mikhail Paulyshka
+// SPDX-License-Identifier: MIT
 
-using Mixaill.SetupApi.Defines;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
+
+using Microsoft.Windows.Sdk;
+
+using Mixaill.SetupApi.Defines;
 
 namespace Mixaill.SetupApi
 {
