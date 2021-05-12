@@ -45,13 +45,24 @@ namespace Mixaill.HwInfo.SetupApi
         private List<DeviceResourceMemory> getMemoryResources(SP_DEVINFO_DATA devInfo)
         {
             var result = new List<DeviceResourceMemory>();
-           
-            foreach (var res in getResources<MEM_RESOURCE>(devInfo))
+
+            var memoryRes = getResources<MEM_RESOURCE>(devInfo, Constants.ALLOC_LOG_CONF);
+            if(memoryRes.Count == 0)
+            {
+                memoryRes = getResources<MEM_RESOURCE>(devInfo, Constants.BOOT_LOG_CONF);
+            }
+
+            var largeMemoryRes = getResources<Mem_Large_Resource_s>(devInfo, Constants.ALLOC_LOG_CONF);
+            if (largeMemoryRes.Count == 0)
+            {
+                largeMemoryRes = getResources<Mem_Large_Resource_s>(devInfo, Constants.BOOT_LOG_CONF);
+            }
+
+            foreach (var res in memoryRes)
             {
                 result.Add(new DeviceResourceMemory(DeviceResourceType.Mem, res.MEM_Header.MD_Alloc_Base, res.MEM_Header.MD_Alloc_End));
             }
-           
-            foreach (var res in getResources<Mem_Large_Resource_s>(devInfo))
+            foreach (var res in largeMemoryRes)
             {
                 result.Add(new DeviceResourceMemory(DeviceResourceType.MemLarge, res.MEM_LARGE_Header.MLD_Alloc_Base, res.MEM_LARGE_Header.MLD_Alloc_End));
             }
@@ -59,55 +70,65 @@ namespace Mixaill.HwInfo.SetupApi
             return result;
         }
 
-        private unsafe List<T> getResources<T>(SP_DEVINFO_DATA devInfo) where T: struct
+        private unsafe List<T> getResources<T>(SP_DEVINFO_DATA devInfo, uint logConfFlags) where T: struct
         {
-            var result = new List<T>();
+            var resources = new List<T>();
 
             UIntPtr logicalConfiguration;
             UIntPtr resourceDescriptor;
             var resourceType = typeof(T) == typeof(MEM_RESOURCE) ? DeviceResourceType.Mem : DeviceResourceType.MemLarge;
 
-            if (PInvoke.CM_Get_First_Log_Conf(&logicalConfiguration, devInfo.DevInst, Constants.ALLOC_LOG_CONF) != CONFIGRET.CR_SUCCESS)
+            var result = PInvoke.CM_Get_First_Log_Conf(&logicalConfiguration, devInfo.DevInst, logConfFlags);
+            if (result == CONFIGRET.CR_SUCCESS)
             {
-                throw new Win32Exception("Failed to get first logical configuration");
-            }
-
-            var cmResult = PInvoke.CM_Get_Next_Res_Des(out resourceDescriptor, logicalConfiguration, (uint)resourceType, null, 0);
-            while (resourceDescriptor != null)
-            {
-                uint dataSize = 0;
-                if(PInvoke.CM_Get_Res_Des_Data_Size(out dataSize, resourceDescriptor, 0) != CONFIGRET.CR_SUCCESS)
+                var cmResult = PInvoke.CM_Get_Next_Res_Des(out resourceDescriptor, logicalConfiguration, (uint)resourceType, null, 0);
+                while (resourceDescriptor != null)
                 {
-                    break;
-                }
-
-
-                T res;
-                fixed (void* p = new byte[dataSize])
-                {
-                    if (PInvoke.CM_Get_Res_Des_Data(resourceDescriptor, p, dataSize, 0) != CONFIGRET.CR_SUCCESS)
+                    uint dataSize = 0;
+                    if (PInvoke.CM_Get_Res_Des_Data_Size(out dataSize, resourceDescriptor, 0) != CONFIGRET.CR_SUCCESS)
                     {
                         break;
                     }
 
-                    res = (T)Marshal.PtrToStructure((IntPtr)p, typeof(T));
-                }
-                result.Add(res);
+                    T res;
+                    fixed (void* p = new byte[dataSize])
+                    {
+                        if (PInvoke.CM_Get_Res_Des_Data(resourceDescriptor, p, dataSize, 0) != CONFIGRET.CR_SUCCESS)
+                        {
+                            break;
+                        }
 
-                UIntPtr nextResourceDescriptor;
-                if(PInvoke.CM_Get_Next_Res_Des(out nextResourceDescriptor, resourceDescriptor, (uint)resourceType, null, 0) != CONFIGRET.CR_SUCCESS)
-                {
-                    break;
+                        res = (T)Marshal.PtrToStructure((IntPtr)p, typeof(T));
+                    }
+                    resources.Add(res);
+
+                    UIntPtr nextResourceDescriptor;
+                    result = PInvoke.CM_Get_Next_Res_Des(out nextResourceDescriptor, resourceDescriptor, (uint)resourceType, null, 0);
+                    if (result == CONFIGRET.CR_SUCCESS)
+                    {
+                        PInvoke.CM_Free_Res_Des_Handle(resourceDescriptor);
+                        resourceDescriptor = nextResourceDescriptor;
+
+                    }
+                    else if (result == CONFIGRET.CR_NO_MORE_RES_DES)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        throw new Win32Exception("failed to get resource descriptor");
+                    }
                 }
 
                 PInvoke.CM_Free_Res_Des_Handle(resourceDescriptor);
-                resourceDescriptor = nextResourceDescriptor;
+                PInvoke.CM_Free_Log_Conf(logicalConfiguration, 0);
+            }
+            else if (result != CONFIGRET.CR_NO_MORE_LOG_CONF)
+            {
+                throw new Win32Exception("failed to get logical configuration");
             }
 
-            PInvoke.CM_Free_Res_Des_Handle(resourceDescriptor);
-            PInvoke.CM_Free_Log_Conf(logicalConfiguration, 0);
-
-            return result;
+            return resources;
         }
     }
 
