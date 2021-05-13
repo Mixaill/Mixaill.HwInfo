@@ -50,25 +50,30 @@ namespace Mixaill.HwInfo.SetupApi
 
         internal unsafe DevicePropertyValue GetProperty(SP_DEVINFO_DATA devInfoData, DEVPROPKEY propKey)
         {
+            DevicePropertyValue result = null;
+
             uint propType = 0;
             uint propRequiredSize = 0;
 
             PInvoke.SetupDiGetDeviceProperty((void*)_handle.Value, devInfoData, propKey, out propType, null, 0, &propRequiredSize, 0);
-            if (propRequiredSize == 0)
+
+            if (propRequiredSize > 0)
             {
-                throw new Win32Exception();
-            }
-            
-            var buffer = new byte[propRequiredSize];
-            fixed (byte* p = buffer)
-            {
-                if (!PInvoke.SetupDiGetDeviceProperty((void*)_handle.Value, devInfoData, propKey, out propType, p, (uint)buffer.Length, &propRequiredSize, 0))
+                var buffer = new byte[propRequiredSize];
+                fixed (byte* p = buffer)
                 {
-                    throw new Win32Exception();
+                    if (PInvoke.SetupDiGetDeviceProperty((void*)_handle.Value, devInfoData, propKey, out propType, p, (uint)buffer.Length, &propRequiredSize, 0))
+                    {
+                        result = DevicePropertyValueFactory.Create((DevicePropertyType)propType, buffer);
+                    }
+                    else
+                    {
+                        throw new Win32Exception($"Failed to get device property: guid-->{propKey.fmtid}, pid-->{propKey.pid}");
+                    }
                 }
             }
 
-            return DevicePropertyValueFactory.Create((DevicePropertyType)propType, buffer);
+            return result;
         }
 
         #region IDisposable

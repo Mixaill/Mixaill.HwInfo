@@ -15,29 +15,40 @@ namespace Mixaill.HwInfo.SetupApi
 {
     public class DeviceInfo
     {
-        public string DeviceDescription { get; } = null;
-        public List<string> DeviceHardwareIds { get; } = null;
-        public string DeviceManufacturer { get; } = null;
-        public string DeviceLocationInfo { get; } = null;
+        public string DeviceDescription { get; } = "";
+        public List<string> DeviceHardwareIds { get; } = new List<string>();
+        public string DeviceManufacturer { get; } = "";
+        public string DeviceLocationInfo { get; } = "";
         public List<string> DeviceLocationPaths { get; } = new List<string>();
 
-        public string DeviceInstanceId { get; } = null;
+        public string DeviceInstanceId { get; } = "";
 
-        public string DriverVersion { get; } = null;
+        public string DriverVersion { get; } = "";
 
         public List<DeviceResourceMemory> DeviceResourceMemory { get; } = new List<DeviceResourceMemory>();
 
         internal DeviceInfo(DeviceInfoSet devInfoSet, SP_DEVINFO_DATA devInfo)
         {
-            DeviceDescription = (devInfoSet.GetProperty(devInfo, DevicePropertyKey.Device_DeviceDesc) as DevicePropertyValueString).Value;
-            DeviceHardwareIds = (devInfoSet.GetProperty(devInfo, DevicePropertyKey.Device_HardwareIds) as DevicePropertyValueStringList).Value;
-            DeviceManufacturer = (devInfoSet.GetProperty(devInfo, DevicePropertyKey.Device_Manufacturer) as DevicePropertyValueString).Value;
-            DeviceLocationInfo = (devInfoSet.GetProperty(devInfo, DevicePropertyKey.Device_LocationInfo) as DevicePropertyValueString).Value;
-            DeviceLocationPaths= (devInfoSet.GetProperty(devInfo, DevicePropertyKey.Device_LocationPaths) as DevicePropertyValueStringList).Value;
+            DeviceDescription = (devInfoSet.GetProperty(devInfo, DevicePropertyKey.Device_DeviceDesc) as DevicePropertyValueString)?.Value;
 
-            DeviceInstanceId = (devInfoSet.GetProperty(devInfo, DevicePropertyKey.DeviceInstance_Id) as DevicePropertyValueString).Value;
+            var deviceHardwareIds = (devInfoSet.GetProperty(devInfo, DevicePropertyKey.Device_HardwareIds) as DevicePropertyValueStringList)?.Value;
+            if(deviceHardwareIds != null)
+            {
+                DeviceHardwareIds = deviceHardwareIds;
+            }
 
-            DriverVersion = (devInfoSet.GetProperty(devInfo, DevicePropertyKey.DeviceDriver_Version) as DevicePropertyValueString).Value;
+            DeviceManufacturer = (devInfoSet.GetProperty(devInfo, DevicePropertyKey.Device_Manufacturer) as DevicePropertyValueString)?.Value;
+            DeviceLocationInfo = (devInfoSet.GetProperty(devInfo, DevicePropertyKey.Device_LocationInfo) as DevicePropertyValueString)?.Value;
+
+            var deviceLocationPaths = (devInfoSet.GetProperty(devInfo, DevicePropertyKey.Device_LocationPaths) as DevicePropertyValueStringList)?.Value;
+            if (deviceLocationPaths != null)
+            {
+                DeviceLocationPaths = deviceLocationPaths;
+            }
+
+            DeviceInstanceId = (devInfoSet.GetProperty(devInfo, DevicePropertyKey.DeviceInstance_Id) as DevicePropertyValueString)?.Value;
+
+            DriverVersion = (devInfoSet.GetProperty(devInfo, DevicePropertyKey.DeviceDriver_Version) as DevicePropertyValueString)?.Value;
 
             DeviceResourceMemory = getMemoryResources(devInfo);
         }
@@ -153,13 +164,13 @@ namespace Mixaill.HwInfo.SetupApi
 
         internal DeviceInfoPci(DeviceInfoSet devInfoSet, SP_DEVINFO_DATA devInfo) : base(devInfoSet, devInfo)
         {
-            PciLinkSpeedCurrent = (devInfoSet.GetProperty(devInfo, DevicePropertyKey.PciDevice_CurrentLinkSpeed) as DevicePropertyValueUInt32).Value;
-            PciLinkSpeedMax = (devInfoSet.GetProperty(devInfo, DevicePropertyKey.PciDevice_MaxLinkSpeed) as DevicePropertyValueUInt32).Value;
+            PciLinkSpeedCurrent = (devInfoSet.GetProperty(devInfo, DevicePropertyKey.PciDevice_CurrentLinkSpeed) as DevicePropertyValueUInt32)?.Value ?? 0;
+            PciLinkSpeedMax = (devInfoSet.GetProperty(devInfo, DevicePropertyKey.PciDevice_MaxLinkSpeed) as DevicePropertyValueUInt32)?.Value ?? 0;
 
-            PciLinkWidthCurrent = (devInfoSet.GetProperty(devInfo, DevicePropertyKey.PciDevice_CurrentLinkWidth) as DevicePropertyValueUInt32).Value;
-            PciLinkWidthMax = (devInfoSet.GetProperty(devInfo, DevicePropertyKey.PciDevice_MaxLinkWidth) as DevicePropertyValueUInt32).Value;
+            PciLinkWidthCurrent = (devInfoSet.GetProperty(devInfo, DevicePropertyKey.PciDevice_CurrentLinkWidth) as DevicePropertyValueUInt32)?.Value ?? 0;
+            PciLinkWidthMax = (devInfoSet.GetProperty(devInfo, DevicePropertyKey.PciDevice_MaxLinkWidth) as DevicePropertyValueUInt32)?.Value ?? 0;
         
-            PciBarTypes = (devInfoSet.GetProperty(devInfo, DevicePropertyKey.PciDevice_BarTypes) as DevicePropertyValueUInt32).Value;
+            PciBarTypes = (devInfoSet.GetProperty(devInfo, DevicePropertyKey.PciDevice_BarTypes) as DevicePropertyValueUInt32)?.Value ?? 0;
         }
     }
 
@@ -167,7 +178,7 @@ namespace Mixaill.HwInfo.SetupApi
     {
         internal static DeviceInfo Create(DeviceInfoSet devInfoSet, SP_DEVINFO_DATA devInfo)
         {
-            var busType = (devInfoSet.GetProperty(devInfo, DevicePropertyKey.Device_BusTypeGuid) as DevicePropertyValueGuid).Value;
+            var busType = (devInfoSet.GetProperty(devInfo, DevicePropertyKey.Device_BusTypeGuid) as DevicePropertyValueGuid)?.Value;
             if (busType == DeviceBusType.Pci)
             {
                 return new DeviceInfoPci(devInfoSet, devInfo);

@@ -57,7 +57,7 @@ namespace Mixaill.HwInfo.SetupApi.Demo
                     Console.WriteLine($"   - IO                   > {deviceInfoPci.PciBarTypes_Io}");
                     Console.WriteLine($"   - Mem_Prefetch_disable > {deviceInfoPci.PciBarTypes_NonPrefetchable}");
                     Console.WriteLine($"   - Mem_Prefetch_32bit   > {deviceInfoPci.PciBarTypes_32BitPrefetchable}");
-                    Console.WriteLine($"   - Mem_Prefetch_64bit   > {deviceInfoPci.PciBarTypes_64BitPrefetchable} <-------- Re-sizable BAR");
+                    Console.WriteLine($"   - Mem_Prefetch_64bit   > {deviceInfoPci.PciBarTypes_64BitPrefetchable}");
                     Console.WriteLine("");
 
                     Console.WriteLine($"Pci_Above4G_Decoding      : {deviceInfoPci.Pci_Above4GDecoding}");
