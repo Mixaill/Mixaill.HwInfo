@@ -43,7 +43,16 @@ namespace Mixaill.HwInfo.SetupApi
             data.cbSize = (uint)sizeof(SP_DEVINFO_DATA);
             while (PInvoke.SetupDiEnumDeviceInfo((void*)_handle.Value, idx, out data))
             {
-                Devices.Add(DeviceInfoFactory.Create(this, data));
+                uint status = 0;
+                uint problem_number = 0;
+                if(PInvoke.CM_Get_DevNode_Status(out status, out problem_number, data.DevInst, 0) == CONFIGRET.CR_SUCCESS)
+                {
+                    if ((status & (uint)DeviceNodeStatus.Started) == (uint)DeviceNodeStatus.Started)
+                    {
+                        Devices.Add(DeviceInfoFactory.Create(this, data));
+                    }
+                }
+
                 idx++;
             }
         }

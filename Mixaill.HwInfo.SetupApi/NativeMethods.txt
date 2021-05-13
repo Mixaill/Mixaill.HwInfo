@@ -2,6 +2,7 @@
 INVALID_HANDLE_VALUE
 
 // DevInst/Functions
+CM_Get_DevNode_Status
 CM_Get_First_Log_Conf
 CM_Get_Next_Res_Des
 CM_Get_Res_Des_Data
