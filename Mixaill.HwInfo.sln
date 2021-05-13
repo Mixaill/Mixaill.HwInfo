@@ -5,7 +5,11 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mixaill.HwInfo.SetupApi", "Mixaill.HwInfo.SetupApi\Mixaill.HwInfo.SetupApi.csproj", "{F76C8E31-06DE-4279-ACE7-DC5D84726D39}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mixaill.HwInfo.SetupApi.Demo", "Mixaill.HwInfoSetupApi.Demo\Mixaill.HwInfo.SetupApi.Demo.csproj", "{F4236BB5-087C-4DC1-948E-4548D3903459}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mixaill.HwInfo.Vulkan", "Mixaill.HwInfo.Vulkan\Mixaill.HwInfo.Vulkan.csproj", "{B33C40CC-E7C4-4842-AC8C-D64449CEAD26}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mixaill.HwInfo.Vulkan.Demo", "Mixaill.HwInfo.Vulkan.Demo\Mixaill.HwInfo.Vulkan.Demo.csproj", "{7587B8DE-A4EA-454F-A46F-752E25848597}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mixaill.HwInfo.SetupApi.Demo", "Mixaill.HwInfo.SetupApi.Demo\Mixaill.HwInfo.SetupApi.Demo.csproj", "{2F1ED4BC-ED70-4BB1-8A59-00AEB5F7B740}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +21,18 @@ Global
 		{F76C8E31-06DE-4279-ACE7-DC5D84726D39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F76C8E31-06DE-4279-ACE7-DC5D84726D39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F76C8E31-06DE-4279-ACE7-DC5D84726D39}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F4236BB5-087C-4DC1-948E-4548D3903459}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F4236BB5-087C-4DC1-948E-4548D3903459}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F4236BB5-087C-4DC1-948E-4548D3903459}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F4236BB5-087C-4DC1-948E-4548D3903459}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B33C40CC-E7C4-4842-AC8C-D64449CEAD26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B33C40CC-E7C4-4842-AC8C-D64449CEAD26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B33C40CC-E7C4-4842-AC8C-D64449CEAD26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B33C40CC-E7C4-4842-AC8C-D64449CEAD26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7587B8DE-A4EA-454F-A46F-752E25848597}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7587B8DE-A4EA-454F-A46F-752E25848597}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7587B8DE-A4EA-454F-A46F-752E25848597}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7587B8DE-A4EA-454F-A46F-752E25848597}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F1ED4BC-ED70-4BB1-8A59-00AEB5F7B740}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F1ED4BC-ED70-4BB1-8A59-00AEB5F7B740}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F1ED4BC-ED70-4BB1-8A59-00AEB5F7B740}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F1ED4BC-ED70-4BB1-8A59-00AEB5F7B740}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

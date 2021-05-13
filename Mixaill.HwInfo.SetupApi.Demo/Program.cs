@@ -12,7 +12,7 @@ namespace Mixaill.HwInfo.SetupApi.Demo
     {
         static void Main(string[] args)
         {
-            Console.WriteLine($"Mixaill.SetupApi.Demo v{Assembly.GetEntryAssembly().GetName().Version}\n\n");
+            Console.WriteLine($"{Assembly.GetEntryAssembly().GetName().Name} v{Assembly.GetEntryAssembly().GetName().Version}\n");
 
             var deviceInfoSet = new DeviceInfoSet(DeviceClassGuid.Display);
             
