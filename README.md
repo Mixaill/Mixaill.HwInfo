@@ -4,6 +4,13 @@ A set of small libraries which helps to get advanced info about hardware
 
 Download demo: https://github.com/Mixaill/Mixaill.SetupApi/releases
 
+## Mixaill.HwInfo.D3DKMT
+
+Gives access to some info like HAGS status via D3DKMT_ functions
+
+![image1](docs/image_d3dkmt.png)
+
+
 ## Mixaill.HwInfo.Vulkan
 
 Receives info about GPU memory aperture size
