@@ -26,9 +26,11 @@ namespace Mixaill.HwInfo.D3DKMT
 
         public Interop._D3DKMT_ADAPTERTYPE AdapterType;
 
-        public Interop._D3DKMT_QUERY_DEVICE_IDS DeviceIds;
+        public Interop._D3DKMT_DEVICE_IDS DeviceIds;
 
         public Interop._D3DKMT_DRIVERVERSION DriverVersion = Interop._D3DKMT_DRIVERVERSION.KMT_DRIVERVERSION_WDDM_1_0;
+
+        public Interop._D3DKMT_GPUMMU_CAPS GpuMmuCapabilities;
 
         public Interop._D3DKMT_ADAPTER_PERFDATACAPS PerformanceDataCapabilities;
 
@@ -60,6 +62,7 @@ namespace Mixaill.HwInfo.D3DKMT
                 DriverVersion = getDriverVersion();
                 AdapterType = getAdapterType();
                 DeviceIds = getDeviceIds();
+                GpuMmuCapabilities = getGpuMmuCapabilities();
                 PerformanceDataCapabilities = getPerformanceDataCapabilities();
                 WddmCapabilities_27 = getWddmCapabilities27();
             }
@@ -123,15 +126,27 @@ namespace Mixaill.HwInfo.D3DKMT
         }
 
         //ID 31
-        private unsafe Interop._D3DKMT_QUERY_DEVICE_IDS getDeviceIds()
+        private unsafe Interop._D3DKMT_DEVICE_IDS getDeviceIds()
         {
             var result = new Interop._D3DKMT_QUERY_DEVICE_IDS();
             if (DriverVersion >= Interop._D3DKMT_DRIVERVERSION.KMT_DRIVERVERSION_WDDM_2_0)
             {
                 queryAdapterInfo(Interop._D3DKMT_QUERYADAPTERINFOTYPE.KMTQAITYPE_PHYSICALADAPTERDEVICEIDS, (IntPtr)(&result), sizeof(Interop._D3DKMT_QUERY_DEVICE_IDS));
             }
-            return result;
+            return result.DeviceIds;
         }
+
+        //ID 34
+        private unsafe Interop._D3DKMT_GPUMMU_CAPS getGpuMmuCapabilities()
+        {
+            var result = new Interop._D3DKMT_QUERY_GPUMMU_CAPS();
+            if (DriverVersion >= Interop._D3DKMT_DRIVERVERSION.KMT_DRIVERVERSION_WDDM_2_0)
+            {
+                queryAdapterInfo(Interop._D3DKMT_QUERYADAPTERINFOTYPE.KMTQAITYPE_QUERY_GPUMMU_CAPS, (IntPtr)(&result), sizeof(Interop._D3DKMT_QUERY_GPUMMU_CAPS));
+            }
+            return result.Caps;
+        }
+
 
         //ID 62
         public unsafe (bool, Interop._D3DKMT_ADAPTER_PERFDATA) GetPerformanceData()

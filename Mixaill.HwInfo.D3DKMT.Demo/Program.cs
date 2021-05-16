@@ -61,18 +61,23 @@ namespace Mixaill.HwInfo.D3DKMT.Demo
                 Console.WriteLine("");
 
                 Console.WriteLine("ID 31, Physical Adapter Device IDs:");
-                Console.WriteLine($"   - adapter idx    : {adapter.DeviceIds.PhysicalAdapterIndex}");
-                Console.WriteLine($"   - vendor id      : 0x{adapter.DeviceIds.DeviceIds.VendorID:X4}");
-                Console.WriteLine($"   - device id      : 0x{adapter.DeviceIds.DeviceIds.DeviceID:X4}");
-                Console.WriteLine($"   - subvendor id   : 0x{adapter.DeviceIds.DeviceIds.SubVendorID:X4}");
-                Console.WriteLine($"   - subsystem id   : 0x{adapter.DeviceIds.DeviceIds.SubSystemID:X4}");
-                Console.WriteLine($"   - revision id    : 0x{adapter.DeviceIds.DeviceIds.RevisionID:X4}");
-                Console.WriteLine($"   - bus type       : 0x{adapter.DeviceIds.DeviceIds.BusType}");
+                Console.WriteLine($"   - vendor id      : 0x{adapter.DeviceIds.VendorID:X4}");
+                Console.WriteLine($"   - device id      : 0x{adapter.DeviceIds.DeviceID:X4}");
+                Console.WriteLine($"   - subvendor id   : 0x{adapter.DeviceIds.SubVendorID:X4}");
+                Console.WriteLine($"   - subsystem id   : 0x{adapter.DeviceIds.SubSystemID:X4}");
+                Console.WriteLine($"   - revision id    : 0x{adapter.DeviceIds.RevisionID:X4}");
+                Console.WriteLine($"   - bus type       : 0x{adapter.DeviceIds.BusType}");
+                Console.WriteLine("");
+
+                Console.WriteLine("ID 34, GPU MMU Capabilities:");
+                Console.WriteLine($"   - VA bit count   : {adapter.GpuMmuCapabilities.VirtualAddressBitCount}");
+                Console.WriteLine($"   - r/o            : {adapter.GpuMmuCapabilities.ReadOnlyMemorySupported}");
+                Console.WriteLine($"   - no_exec        : {adapter.GpuMmuCapabilities.NoExecuteMemorySupported}");
+                Console.WriteLine($"   - cache_coherent : {adapter.GpuMmuCapabilities.CacheCoherentMemorySupported}");
                 Console.WriteLine("");
 
                 var perfdata = adapter.GetPerformanceData().Item2;
                 Console.WriteLine("ID 62, Adapter Performance Data:");
-                Console.WriteLine($"   - adapter idx    : {perfdata.PhysicalAdapterIndex}");
                 Console.WriteLine($"   - mem. freq.     : {perfdata.MemoryFrequency} Hz");
                 Console.WriteLine($"   - mem. freq. max : {perfdata.MaxMemoryFrequency} Hz");
                 Console.WriteLine($"   - mem. freq. OC  : {perfdata.MaxMemoryFrequencyOC} Hz");
@@ -89,8 +94,8 @@ namespace Mixaill.HwInfo.D3DKMT.Demo
                 Console.WriteLine($"   - max mem bandwth: {adapter.PerformanceDataCapabilities.MaxMemoryBandwidth} Bytes");
                 Console.WriteLine($"   - max pci bandwth: {adapter.PerformanceDataCapabilities.MaxPCIEBandwidth} Bytes");
                 Console.WriteLine($"   - max fan speed  : {adapter.PerformanceDataCapabilities.MaxFanRPM} RPM");
-                Console.WriteLine($"   - temp max       : {adapter.PerformanceDataCapabilities.TemperatureMax} *C");
-                Console.WriteLine($"   - temp warning   : {adapter.PerformanceDataCapabilities.TemperatureWarning} *C");
+                Console.WriteLine($"   - temp max       : {adapter.PerformanceDataCapabilities.TemperatureMax / 10.0} *C");
+                Console.WriteLine($"   - temp warning   : {adapter.PerformanceDataCapabilities.TemperatureWarning / 10.0} *C");
                 Console.WriteLine("");
 
                 Console.WriteLine("ID 70, WDDM 2.7 Capabilities:");

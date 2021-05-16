@@ -14,6 +14,7 @@ namespace Mixaill.HwInfo.D3DKMT.Interop
 
         //WDDM 2.0
         KMTQAITYPE_PHYSICALADAPTERDEVICEIDS = 31,
+        KMTQAITYPE_QUERY_GPUMMU_CAPS        = 34,
 
         //WDDM 2.4
         KMTQAITYPE_ADAPTERPERFDATA          = 62,
