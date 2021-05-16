@@ -11,7 +11,7 @@ namespace Mixaill.HwInfo.D3DKMT.Interop
     {
         public uint hAdapter;
 
-        public _KMTQUERYADAPTERINFOTYPE Type;
+        public _D3DKMT_QUERYADAPTERINFOTYPE Type;
 
         public IntPtr pPrivateDriverData;
 

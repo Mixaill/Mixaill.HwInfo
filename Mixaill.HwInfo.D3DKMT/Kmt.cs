@@ -30,7 +30,6 @@ namespace Mixaill.HwInfo.D3DKMT
         {
             var result = new List<KmtAdapter>();
 
-            _logger?.LogInformation("m");
             try
             {
                 var adapters = new Interop._D3DKMT_ENUMADAPTERS();

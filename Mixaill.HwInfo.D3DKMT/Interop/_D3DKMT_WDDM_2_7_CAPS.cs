@@ -3,6 +3,8 @@
 
 using System.Runtime.InteropServices;
 
+using Mixaill.HwInfo.D3DKMT.Helpers;
+
 namespace Mixaill.HwInfo.D3DKMT.Interop
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -10,8 +12,8 @@ namespace Mixaill.HwInfo.D3DKMT.Interop
     {
         uint data;
 
-        public bool HagsSupported => (data & (1 << 0)) != 0;
+        public bool HagsSupported => data.IsBitSet(0);
 
-        public bool HagsEnabled   => (data & (1 << 1)) != 0;
+        public bool HagsEnabled => data.IsBitSet(1);
     }
 }
