@@ -4,41 +4,55 @@
 using System;
 using System.Reflection;
 
+using Microsoft.Extensions.Logging;
+
 namespace Mixaill.HwInfo.Vulkan.Demo
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine($"{Assembly.GetEntryAssembly().GetName().Name} v{Assembly.GetEntryAssembly().GetName().Version}\n");
+            using var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder
+                    .AddSimpleConsole(options =>
+                    {
+                        options.IncludeScopes = true;
+                        options.SingleLine = true;
+                    });
+            });
+
+            var logger = loggerFactory.CreateLogger<Program>();
+
+            logger.LogInformation($"{Assembly.GetEntryAssembly().GetName().Name} v{Assembly.GetEntryAssembly().GetName().Version}\n");
 
 
-            Vulkan vk = new Vulkan();
+            Vulkan vk = new Vulkan(loggerFactory);
 
             var devices = vk.GetPhysicalDevices();
-            Console.WriteLine($"Vulkan device count: {devices.Count}\n");
+            logger.LogInformation($"Vulkan device count: {devices.Count}\n");
 
             for(int devIdx = 0; devIdx < devices.Count; devIdx++)
             {
                 var dev = devices[devIdx];
 
-                Console.WriteLine("\n------------\n");
-                Console.WriteLine($"Device Index      : {devIdx}");
-                Console.WriteLine($"Device Name       : {dev.DeviceName}");
-                Console.WriteLine($"Device Type       : {dev.DeviceType}");
-                Console.WriteLine("");
+                logger.LogInformation("\n------------\n");
+                logger.LogInformation($"Device Index      : {devIdx}");
+                logger.LogInformation($"Device Name       : {dev.DeviceName}");
+                logger.LogInformation($"Device Type       : {dev.DeviceType}");
+                logger.LogInformation("");
 
-                Console.WriteLine($"Vendor ID         : 0x{dev.VendorId:X4}");
-                Console.WriteLine($"Device ID         : 0x{dev.DeviceId:X4}");
-                Console.WriteLine("");
+                logger.LogInformation($"Vendor ID         : 0x{dev.VendorId:X4}");
+                logger.LogInformation($"Device ID         : 0x{dev.DeviceId:X4}");
+                logger.LogInformation("");
 
-                Console.WriteLine($"Api Version       : {dev.ApiVersion}");
-                Console.WriteLine($"Driver Version    : {dev.DriverVersion}");
-                Console.WriteLine("");
+                logger.LogInformation($"Api Version       : {dev.ApiVersion}");
+                logger.LogInformation($"Driver Version    : {dev.DriverVersion}");
+                logger.LogInformation("");
 
-                Console.WriteLine($"HostVisibleMemory : {dev.DeviceHostVisibleMemory/1024/1024.0} MiB");
-                Console.WriteLine($"ResizableBarInUse : {dev.DeviceResizableBarInUse}");
-                Console.WriteLine("");
+                logger.LogInformation($"HostVisibleMemory : {dev.DeviceHostVisibleMemory/1024/1024.0} MiB");
+                logger.LogInformation($"ResizableBarInUse : {dev.DeviceResizableBarInUse}");
+                logger.LogInformation("");
             }
 
 
