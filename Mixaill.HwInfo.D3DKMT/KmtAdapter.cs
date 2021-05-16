@@ -7,13 +7,26 @@ namespace Mixaill.HwInfo.D3DKMT
 {
     public class KmtAdapter : IDisposable
     {
+        #region properties
+
         public Interop._D3DKMT_ADAPTERINFO AdapterInfo;
+        
         public Interop._D3DKMT_ADAPTERREGISTRYINFO AdapterRegistryInfo;
+        
         public Interop._D3DKMT_DEVICE_IDS DeviceIds;
+        
         public Interop._D3DKMT_WDDM_2_7_CAPS WddmCapabilities_27;
+        
         public uint PhysicalAdapterIndex { get; private set; } = 0;
 
+        #endregion
+
         public KmtAdapter(Interop._D3DKMT_ADAPTERINFO AdapterInfo)
+        {
+            init(AdapterInfo);
+        }
+
+        private void init(Interop._D3DKMT_ADAPTERINFO AdapterInfo)
         {
             this.AdapterInfo = AdapterInfo;
 

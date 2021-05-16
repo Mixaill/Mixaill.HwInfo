@@ -4,15 +4,29 @@
 using System;
 using System.Reflection;
 
+using Microsoft.Extensions.Logging;
+
 namespace Mixaill.HwInfo.D3DKMT.Demo
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine($"{Assembly.GetEntryAssembly().GetName().Name} v{Assembly.GetEntryAssembly().GetName().Version}\n");
+            using var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder
+                    .AddSimpleConsole(options =>
+                    {
+                        options.IncludeScopes = true;
+                        options.SingleLine = true;
+                    });
+            });
 
-            var kmt = new Kmt();
+            var logger = loggerFactory.CreateLogger<Program>();
+
+            logger.LogInformation($"{Assembly.GetEntryAssembly().GetName().Name} v{Assembly.GetEntryAssembly().GetName().Version}\n");
+
+            var kmt = new Kmt(loggerFactory);
             foreach(var adapter in kmt.GetAdapters())
             {
                 if(adapter.DeviceIds.VendorID == 0x1414) //skip microsoft
@@ -21,27 +35,27 @@ namespace Mixaill.HwInfo.D3DKMT.Demo
                     continue;
                 }
 
-                Console.WriteLine("RegistryInfo:");
-                Console.WriteLine($"   - adapter string : {adapter.AdapterRegistryInfo.AdapterString}");
-                Console.WriteLine($"   - bios string    : {adapter.AdapterRegistryInfo.BiosString}");
-                Console.WriteLine($"   - dac type       : {adapter.AdapterRegistryInfo.DacType}");
-                Console.WriteLine($"   - chip type      : {adapter.AdapterRegistryInfo.ChipType}");
-                Console.WriteLine("");
+                logger.LogInformation("RegistryInfo:");
+                logger.LogInformation($"   - adapter string : {adapter.AdapterRegistryInfo.AdapterString}");
+                logger.LogInformation($"   - bios string    : {adapter.AdapterRegistryInfo.BiosString}");
+                logger.LogInformation($"   - dac type       : {adapter.AdapterRegistryInfo.DacType}");
+                logger.LogInformation($"   - chip type      : {adapter.AdapterRegistryInfo.ChipType}");
+                logger.LogInformation("");
 
-                Console.WriteLine("Device Ids:");
-                Console.WriteLine($"   - adapter idx    : {adapter.PhysicalAdapterIndex}");
-                Console.WriteLine($"   - vendor id      : 0x{adapter.DeviceIds.VendorID:X4}");
-                Console.WriteLine($"   - device id      : 0x{adapter.DeviceIds.DeviceID:X4}");
-                Console.WriteLine($"   - subvendor id   : 0x{adapter.DeviceIds.SubVendorID:X4}");
-                Console.WriteLine($"   - subsystem id   : 0x{adapter.DeviceIds.SubSystemID:X4}");
-                Console.WriteLine($"   - revision id    : 0x{adapter.DeviceIds.RevisionID:X4}");
-                Console.WriteLine($"   - bus type       : 0x{adapter.DeviceIds.BusType}");
-                Console.WriteLine("");
+                logger.LogInformation("Device Ids:");
+                logger.LogInformation($"   - adapter idx    : {adapter.PhysicalAdapterIndex}");
+                logger.LogInformation($"   - vendor id      : 0x{adapter.DeviceIds.VendorID:X4}");
+                logger.LogInformation($"   - device id      : 0x{adapter.DeviceIds.DeviceID:X4}");
+                logger.LogInformation($"   - subvendor id   : 0x{adapter.DeviceIds.SubVendorID:X4}");
+                logger.LogInformation($"   - subsystem id   : 0x{adapter.DeviceIds.SubSystemID:X4}");
+                logger.LogInformation($"   - revision id    : 0x{adapter.DeviceIds.RevisionID:X4}");
+                logger.LogInformation($"   - bus type       : 0x{adapter.DeviceIds.BusType}");
+                logger.LogInformation("");
 
-                Console.WriteLine("WDDM 2.7 Capabilities:");
-                Console.WriteLine($"   - HAGS supported : {adapter.WddmCapabilities_27.HagsSupported}");
-                Console.WriteLine($"   - HAGS enabled   : {adapter.WddmCapabilities_27.HagsEnabled}");
-                Console.WriteLine("");
+                logger.LogInformation("WDDM 2.7 Capabilities:");
+                logger.LogInformation($"   - HAGS supported : {adapter.WddmCapabilities_27.HagsSupported}");
+                logger.LogInformation($"   - HAGS enabled   : {adapter.WddmCapabilities_27.HagsEnabled}");
+                logger.LogInformation("");
 
                 adapter.Dispose();
             }
