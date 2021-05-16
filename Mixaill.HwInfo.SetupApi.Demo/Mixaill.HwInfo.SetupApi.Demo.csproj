@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
     <StartupObject>Mixaill.HwInfo.SetupApi.Demo.Program</StartupObject>
-    <Version>0.3.6</Version>
+    <Version>0.3.7</Version>
     <Authors>Mikhail Paulyshka</Authors>
     <Company>Mikhail Paulyshka</Company>
     <Copyright>2021, Mikhail Paulyshka</Copyright>
@@ -13,8 +13,8 @@
     <RepositoryUrl>https://github.com/Mixaill/Mixaill.HwInfo.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>0.3.6.0</AssemblyVersion>
-    <FileVersion>0.3.6.0</FileVersion>
+    <AssemblyVersion>0.3.7.0</AssemblyVersion>
+    <FileVersion>0.3.7.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
