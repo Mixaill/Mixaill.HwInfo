@@ -26,7 +26,7 @@ namespace Mixaill.HwInfo.D3DKMT.Demo
 
             logger.LogInformation($"{Assembly.GetEntryAssembly().GetName().Name} v{Assembly.GetEntryAssembly().GetName().Version}\n");
 
-            var kmt = new Kmt(loggerFactory);
+            var kmt = new Kmt(loggerFactory.CreateLogger<Kmt>());
             foreach(var adapter in kmt.GetAdapters())
             {
                 if(adapter.DeviceIds.VendorID == 0x1414) //skip microsoft

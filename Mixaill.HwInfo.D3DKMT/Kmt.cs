@@ -10,10 +10,15 @@ namespace Mixaill.HwInfo.D3DKMT
 {
     public class Kmt
     {
-        private readonly ILogger<Kmt> _logger = null;
+        private readonly ILogger _logger = null;
 
         public Kmt()
         {
+        }
+
+        public Kmt(ILogger logger)
+        {
+            _logger = logger;
         }
 
         public Kmt(ILogger<Kmt> logger)
@@ -21,15 +26,11 @@ namespace Mixaill.HwInfo.D3DKMT
             _logger = logger;
         }
 
-        public Kmt(ILoggerFactory loggerFactory)
-        {
-            _logger = loggerFactory?.CreateLogger<Kmt>();
-        }
-
         public List<KmtAdapter> GetAdapters()
         {
             var result = new List<KmtAdapter>();
 
+            _logger?.LogInformation("m");
             try
             {
                 var adapters = new Interop._D3DKMT_ENUMADAPTERS();
@@ -37,7 +38,11 @@ namespace Mixaill.HwInfo.D3DKMT
                 {
                     for (int i = 0; i < adapters.NumAdapters; i++)
                     {
-                        result.Add(new KmtAdapter(adapters.Adapters[i])); ;
+                        var adapter = new KmtAdapter(adapters.Adapters[i], _logger);
+                        if (adapter.Initialized)
+                        {
+                            result.Add(adapter);
+                        }
                     }
                 }
             }

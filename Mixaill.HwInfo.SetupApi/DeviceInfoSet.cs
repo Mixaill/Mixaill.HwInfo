@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
+using Microsoft.Extensions.Logging;
 using Microsoft.Windows.Sdk;
 
 using Mixaill.HwInfo.SetupApi.Defines;
@@ -15,22 +16,37 @@ namespace Mixaill.HwInfo.SetupApi
     {
         #region Properties
 
-        public Guid ClassGuid { get; }        
+        public Guid ClassGuid { get; private set; }        
         
         public List<DeviceInfo> Devices { get; } = new List<DeviceInfo>();
 
         private HANDLE _handle { get; set; }
 
+        private readonly ILogger _logger = null;
+
         #endregion
 
         public DeviceInfoSet(Guid guid)
         {
-            ClassGuid = guid;
-            Initialize();
+            Initialize(guid);
         }
 
-        private unsafe void Initialize()
+        public DeviceInfoSet(Guid guid, ILogger logger)
         {
+            _logger = logger;
+            Initialize(guid);
+        }
+
+        public DeviceInfoSet(Guid guid, ILogger<DeviceInfoSet> logger)
+        {
+            _logger = logger;
+            Initialize(guid);
+        }
+
+        private unsafe void Initialize(Guid guid)
+        {
+            ClassGuid = guid;
+
             _handle = new HANDLE((IntPtr)PInvoke.SetupDiGetClassDevs(ClassGuid, null, new HWND((IntPtr)0), 0));
             if (_handle.Equals(Constants.INVALID_HANDLE_VALUE))
             {

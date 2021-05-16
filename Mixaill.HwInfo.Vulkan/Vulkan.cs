@@ -20,7 +20,7 @@ namespace Mixaill.HwInfo.Vulkan
 
         public bool Initialized { get; private set; } = false;
 
-        private readonly ILogger<Vulkan> _logger = null;
+        private readonly ILogger _logger = null;
 
         private Vk _vk { get; set;  } = null;
 
@@ -33,15 +33,15 @@ namespace Mixaill.HwInfo.Vulkan
             init();
         }
 
-        public Vulkan(ILogger<Vulkan> logger)
+        public Vulkan(ILogger logger)
         {
             _logger = logger;
             init();
         }
 
-        public Vulkan(ILoggerFactory loggerFactory)
+        public Vulkan(ILogger<Vulkan> logger)
         {
-            _logger = loggerFactory.CreateLogger<Vulkan>();
+            _logger = logger;
             init();
         }
 
@@ -129,7 +129,7 @@ namespace Mixaill.HwInfo.Vulkan
                         {
                             foreach (var physicalDevice in physicalDevices)
                             {
-                                result.Add(new VulkanPhysicalDevice(_vk, _vk_instance, physicalDevice));
+                                result.Add(new VulkanPhysicalDevice(_vk, _vk_instance, physicalDevice, _logger));
                             }
                         }
                     }

@@ -3,6 +3,8 @@
 
 using System;
 
+using Microsoft.Extensions.Logging;
+
 namespace Mixaill.HwInfo.D3DKMT
 {
     public class KmtAdapter : IDisposable
@@ -16,13 +18,22 @@ namespace Mixaill.HwInfo.D3DKMT
         public Interop._D3DKMT_DEVICE_IDS DeviceIds;
         
         public Interop._D3DKMT_WDDM_2_7_CAPS WddmCapabilities_27;
-        
+
+        public bool Initialized { get; private set; } = false;
+
         public uint PhysicalAdapterIndex { get; private set; } = 0;
 
+        private readonly ILogger _logger = null;
         #endregion
 
-        public KmtAdapter(Interop._D3DKMT_ADAPTERINFO AdapterInfo)
+        public KmtAdapter(Interop._D3DKMT_ADAPTERINFO AdapterInfo, ILogger logger)
         {
+            _logger = logger;
+            init(AdapterInfo);
+        }
+        public KmtAdapter(Interop._D3DKMT_ADAPTERINFO AdapterInfo, ILogger<KmtAdapter> logger)
+        {
+            _logger = logger;
             init(AdapterInfo);
         }
 
@@ -30,9 +41,22 @@ namespace Mixaill.HwInfo.D3DKMT
         {
             this.AdapterInfo = AdapterInfo;
 
-            getRegistryInfo();
-            getDeviceIds();
-            getWddm27();
+            try
+            {
+                getRegistryInfo();
+                getDeviceIds();
+                getWddm27();
+            }
+            catch (EntryPointNotFoundException ex)
+            {
+                _logger?.LogWarning($"function not found: {ex.TargetSite.Name}");
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "unkown error");
+            }
+
+            Initialized = true;
         }
 
         private unsafe bool getRegistryInfo()
@@ -57,8 +81,6 @@ namespace Mixaill.HwInfo.D3DKMT
 
         private unsafe bool getDeviceIds()
         {
-            bool result = false;
-
             Interop._D3DKMT_QUERY_DEVICE_IDS deviceIdsQuery;
             var adapterQuery = new Interop._D3DKMT_QUERYADAPTERINFO()
             {
@@ -68,7 +90,7 @@ namespace Mixaill.HwInfo.D3DKMT
                 PrivateDriverDataSize = (uint)sizeof(Interop._D3DKMT_QUERY_DEVICE_IDS)
             };
 
-            result = Interop.Gdi.D3DKMTQueryAdapterInfo(ref adapterQuery) == Interop.NtStatus.STATUS_SUCCESS;
+            var result = Interop.Gdi.D3DKMTQueryAdapterInfo(ref adapterQuery) == Interop.NtStatus.STATUS_SUCCESS;
             if (result)
             {
                 DeviceIds = deviceIdsQuery.DeviceIds;

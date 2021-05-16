@@ -4,6 +4,8 @@
 using System;
 using System.Runtime.InteropServices;
 
+using Microsoft.Extensions.Logging;
+
 using Silk.NET.Vulkan;
 
 namespace Mixaill.HwInfo.Vulkan
@@ -32,19 +34,33 @@ namespace Mixaill.HwInfo.Vulkan
 
         #region Properties/Private
 
-        private Vk _vk { get; } = null;
+        private Vk _vk { get; set; } = null;
 
-        private Instance _instance;
+        private Instance _vk_instance;
 
-        private PhysicalDevice _physicalDevice;
+        private PhysicalDevice _vk_physicalDevice;
+
+        private ILogger _logger;
 
         #endregion
 
-        public VulkanPhysicalDevice(Vk vk, Instance instance, PhysicalDevice physicalDevice)
+        public VulkanPhysicalDevice(Vk vk, Instance instance, PhysicalDevice physicalDevice, ILogger logger)
+        {
+            _logger = logger;
+            init(vk, instance, physicalDevice);
+        }
+
+        public VulkanPhysicalDevice(Vk vk, Instance instance, PhysicalDevice physicalDevice, ILogger<VulkanPhysicalDevice> logger)
+        {
+            _logger = logger;
+            init(vk, instance, physicalDevice);
+        }
+
+        private void init(Vk vk, Instance instance, PhysicalDevice physicalDevice)
         {
             _vk = vk;
-            _instance = instance;
-            _physicalDevice = physicalDevice;
+            _vk_instance = instance;
+            _vk_physicalDevice = physicalDevice;
 
             getProperties();
             getHostVisibleMemory();
@@ -53,7 +69,7 @@ namespace Mixaill.HwInfo.Vulkan
         private unsafe void getProperties()
         {
             PhysicalDeviceProperties deviceProperties;
-            _vk.GetPhysicalDeviceProperties(_physicalDevice, out deviceProperties);
+            _vk.GetPhysicalDeviceProperties(_vk_physicalDevice, out deviceProperties);
 
 
             DeviceId = deviceProperties.DeviceID;
@@ -92,7 +108,7 @@ namespace Mixaill.HwInfo.Vulkan
             DeviceHostVisibleMemory = 0;
 
             PhysicalDeviceMemoryProperties memoryProperties;
-            _vk.GetPhysicalDeviceMemoryProperties(_physicalDevice, out memoryProperties);
+            _vk.GetPhysicalDeviceMemoryProperties(_vk_physicalDevice, out memoryProperties);
 
             var searchMask = MemoryPropertyFlags.MemoryPropertyDeviceLocalBit | MemoryPropertyFlags.MemoryPropertyHostVisibleBit | MemoryPropertyFlags.MemoryPropertyHostCoherentBit;
             for (int typeIdx = 0; typeIdx<memoryProperties.MemoryTypeCount; typeIdx++)

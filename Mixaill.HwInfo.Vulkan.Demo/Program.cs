@@ -27,7 +27,7 @@ namespace Mixaill.HwInfo.Vulkan.Demo
             logger.LogInformation($"{Assembly.GetEntryAssembly().GetName().Name} v{Assembly.GetEntryAssembly().GetName().Version}\n");
 
 
-            Vulkan vk = new Vulkan(loggerFactory);
+            Vulkan vk = new Vulkan(loggerFactory.CreateLogger<Vulkan>());
 
             var devices = vk.GetPhysicalDevices();
             logger.LogInformation($"Vulkan device count: {devices.Count}\n");
