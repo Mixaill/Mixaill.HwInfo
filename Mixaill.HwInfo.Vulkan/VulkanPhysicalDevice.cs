@@ -26,7 +26,7 @@ namespace Mixaill.HwInfo.Vulkan
 
         public uint VendorId { get; private set; } = 0;
 
-        public ulong DeviceHostVisibleMemory { get; private set; } = 0;
+        public ulong DeviceHostVisibleMemory => getHostVisibleMemory();
 
         public bool DeviceResizableBarInUse => DeviceHostVisibleMemory > (256 * 1024 * 1024);
 
@@ -103,9 +103,9 @@ namespace Mixaill.HwInfo.Vulkan
         /// Returns size of device host visible memory
         /// </summary>
         /// <returns>size of visible memory in bytes</returns>
-        private void getHostVisibleMemory()
+        private ulong getHostVisibleMemory()
         {
-            DeviceHostVisibleMemory = 0;
+            ulong hostVisibleMemory = 0;
 
             PhysicalDeviceMemoryProperties memoryProperties;
             _vk.GetPhysicalDeviceMemoryProperties(_vk_physicalDevice, out memoryProperties);
@@ -116,9 +116,11 @@ namespace Mixaill.HwInfo.Vulkan
                 var memoryType = memoryProperties.MemoryTypes[typeIdx];
                 if((memoryType.PropertyFlags & searchMask) == searchMask)
                 {
-                    DeviceHostVisibleMemory = Math.Max(DeviceHostVisibleMemory, memoryProperties.MemoryHeaps[(int)memoryType.HeapIndex].Size);
+                    hostVisibleMemory = Math.Max(hostVisibleMemory, memoryProperties.MemoryHeaps[(int)memoryType.HeapIndex].Size);
                 }
             }
+
+            return hostVisibleMemory;
         }
     }
 }
