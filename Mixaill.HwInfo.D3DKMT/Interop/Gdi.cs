@@ -14,6 +14,9 @@ namespace Mixaill.HwInfo.D3DKMT.Interop
         public static extern NtStatus D3DKMTEnumAdapters(ref _D3DKMT_ENUMADAPTERS unnamedParam1);
 
         [DllImport("gdi32", ExactSpelling = true)]
+        public static extern NtStatus D3DKMTEscape(ref _D3DKMT_ESCAPE unnamedParam1);
+
+        [DllImport("gdi32", ExactSpelling = true)]
         public static extern NtStatus D3DKMTQueryAdapterInfo(ref _D3DKMT_QUERYADAPTERINFO unnamedParam1);
 
     }

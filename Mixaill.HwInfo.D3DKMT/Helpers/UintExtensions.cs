@@ -9,5 +9,19 @@ namespace Mixaill.HwInfo.D3DKMT.Helpers
         {
             return ((data >> pos) & 1) != 0;
         }
+
+        public static uint SetBit(this uint data, int pos, bool val)
+        {
+            if (val)
+            {
+                data |= (1U << pos);
+            }
+            else
+            {
+                data &= ~(1U << pos);
+            }
+
+            return data;
+        }
     }
 }
