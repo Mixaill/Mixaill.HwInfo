@@ -4,60 +4,56 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace Mixaill.HwInfo.D3DKMT.Helpers
 {
     public static class InteropHelper
     {
-        internal static unsafe T Get<T>(byte* bytes, int offset, int count)
+        public static T BytesToObj<T>(byte[] bytes)
         {
-            if (bytes == null)
-                return default;
+            int bufferSize = Marshal.SizeOf(typeof(T));
+            IntPtr bufferPtr = Marshal.AllocHGlobal(bufferSize);
 
-            if (!typeof(T).IsValueType)
-                throw new NotSupportedException();
-
-            var size = Marshal.SizeOf<T>();
-            var buffer = new byte[size];
-            for(int i = 0; i < count; i++)
-            {
-                buffer[i] = bytes[offset + i];
-            }
-
-            var ghc = GCHandle.Alloc(buffer, GCHandleType.Pinned);
             try
             {
-                return (T)Marshal.PtrToStructure(ghc.AddrOfPinnedObject(), typeof(T));
+                Marshal.Copy(bytes, 0, bufferPtr, bufferSize);
+                return (T)Marshal.PtrToStructure(bufferPtr, typeof(T));
             }
             finally
             {
-                ghc.Free();
+                Marshal.FreeHGlobal(bufferPtr);
             }
         }
 
-     
-        public static unsafe void Set<T>(T obj, byte* bytes, int offset, int count)
+
+        public static T PointerToObj<T>(IntPtr pointer)
         {
-            if (!typeof(T).IsValueType)
-                throw new ArgumentException(null, nameof(T));
+            return (T)PointerToObj(typeof(T), pointer);
+        }
 
-            var buffer = new byte[Marshal.SizeOf<T>()];
-            var ptr = Marshal.AllocCoTaskMem(buffer.Length);
 
-            try
-            {
-                Marshal.StructureToPtr(obj, ptr, false);
-                Marshal.Copy(ptr, buffer, 0, buffer.Length);
-                for(int i = 0; i < buffer.Length; i++)
-                {
-                    bytes[i] = buffer[i];
-                }
-            }
-            finally
-            {
-                Marshal.FreeCoTaskMem(ptr);
-            }
+        public static object PointerToObj(Type type, IntPtr pointer)
+        {
+            if (type.IsEnum)
+                return Enum.ToObject(type, Marshal.ReadInt32(pointer));
+            
+            if (type.IsValueType)
+                return Marshal.PtrToStructure(pointer, type);
+
+            throw new ArgumentException(null, type.Name);
+        }
+
+
+        public static IntPtr ObjToPointer(object obj)
+        {
+            if (!obj.GetType().IsValueType)
+                throw new ArgumentException(null, obj.GetType().Name);
+
+            var bufferSize = Marshal.SizeOf(obj);
+            var bufferPtr = Marshal.AllocHGlobal(bufferSize);
+            Marshal.StructureToPtr(obj, bufferPtr, false);
+
+            return bufferPtr;
         }
     }
 }

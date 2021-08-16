@@ -3,7 +3,11 @@
 
 namespace Mixaill.HwInfo.D3DKMT.Interop
 {
-    public enum _D3DKMT_DRIVERVERSION : uint
+    /// <summary>
+    /// 
+    /// Reference: d3dkmthk.h::_QAI_DRIVERVERSION
+    /// </summary>
+    public enum _QAI_DRIVERVERSION : uint
     {
         KMT_DRIVERVERSION_WDDM_1_0            = 1000,
         KMT_DRIVERVERSION_WDDM_1_1_PRERELEASE = 1102,
@@ -17,6 +21,9 @@ namespace Mixaill.HwInfo.D3DKMT.Interop
         KMT_DRIVERVERSION_WDDM_2_4            = 2400,
         KMT_DRIVERVERSION_WDDM_2_5            = 2500,
         KMT_DRIVERVERSION_WDDM_2_6            = 2600,
-        KMT_DRIVERVERSION_WDDM_2_7            = 2700
+        KMT_DRIVERVERSION_WDDM_2_7            = 2700,
+        KMT_DRIVERVERSION_WDDM_2_8            = 2800,
+        KMT_DRIVERVERSION_WDDM_2_9            = 2900,
+        KMT_DRIVERVERSION_WDDM_3_0            = 3000,
     }
 }

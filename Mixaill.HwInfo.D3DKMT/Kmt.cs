@@ -37,11 +37,7 @@ namespace Mixaill.HwInfo.D3DKMT
                 {
                     for (int i = 0; i < adapters.NumAdapters; i++)
                     {
-                        var adapter = new KmtAdapter(adapters.Adapters[i], _logger);
-                        if (adapter.Initialized)
-                        {
-                            result.Add(adapter);
-                        }
+                        result.Add(new KmtAdapter(adapters.Adapters[i], _logger));
                     }
                 }
             }

@@ -58,6 +58,20 @@ namespace Mixaill.HwInfo.D3DKMT.Demo
                 Console.WriteLine($"   - detachable     : {adapter.AdapterType.Detachable}");
                 Console.WriteLine($"   - compute only   : {adapter.AdapterType.ComputeOnly}");
                 Console.WriteLine($"   - prototype      : {adapter.AdapterType.Prototype}");
+                Console.WriteLine($"   - rt power mngmt : {adapter.AdapterType.RuntimePowerManagement}");
+                Console.WriteLine("");
+
+                Console.WriteLine("ID 24, WDDM 2.0 Capabilities:");
+                Console.WriteLine($"   - 64-bit atomics  : {adapter.WddmCapabilities_20.Atomics64Bit}");
+                Console.WriteLine($"   - GPU MMU         : {adapter.WddmCapabilities_20.GpuMmu}");
+                Console.WriteLine($"   - Io MMU          : {adapter.WddmCapabilities_20.IoMmu}");
+                Console.WriteLine($"   - flip overwrite  : {adapter.WddmCapabilities_20.FlipOverwrite}");
+                Console.WriteLine($"   - ctxless present : {adapter.WddmCapabilities_20.ContextlessPresent}");
+                Console.WriteLine($"   - surprise removal: {adapter.WddmCapabilities_20.SurpriseRemoval}");
+                Console.WriteLine("");
+
+                Console.WriteLine("ID 26, Content Protection Driver Name:");
+                Console.WriteLine($"   - cp driver name  : {adapter.ContentProtectionDriverName.ContentProtectionFileName}");
                 Console.WriteLine("");
 
                 Console.WriteLine("ID 31, Physical Adapter Device IDs:");
@@ -76,17 +90,16 @@ namespace Mixaill.HwInfo.D3DKMT.Demo
                 Console.WriteLine($"   - cache_coherent : {adapter.GpuMmuCapabilities.CacheCoherentMemorySupported}");
                 Console.WriteLine("");
 
-                var perfdata = adapter.GetPerformanceData().Item2;
                 Console.WriteLine("ID 62, Adapter Performance Data:");
-                Console.WriteLine($"   - mem. freq.     : {perfdata.MemoryFrequency} Hz");
-                Console.WriteLine($"   - mem. freq. max : {perfdata.MaxMemoryFrequency} Hz");
-                Console.WriteLine($"   - mem. freq. OC  : {perfdata.MaxMemoryFrequencyOC} Hz");
-                Console.WriteLine($"   - mem. bandwidth : {perfdata.MemoryBandwidth} Bytes");
-                Console.WriteLine($"   - pcie bandwidth : {perfdata.PCIEBandwidth} Bytes");
-                Console.WriteLine($"   - fan speed      : {perfdata.FanRPM} RPM");
-                Console.WriteLine($"   - power draw     : {perfdata.Power/10.0} %");
-                Console.WriteLine($"   - temperature    : {perfdata.Temperature / 10.0} *C");
-                Console.WriteLine($"   - power state ovr: {perfdata.PowerStateOverride}");
+                Console.WriteLine($"   - mem. freq.     : {adapter.PerformanceData.MemoryFrequency} Hz");
+                Console.WriteLine($"   - mem. freq. max : {adapter.PerformanceData.MaxMemoryFrequency} Hz");
+                Console.WriteLine($"   - mem. freq. OC  : {adapter.PerformanceData.MaxMemoryFrequencyOC} Hz");
+                Console.WriteLine($"   - mem. bandwidth : {adapter.PerformanceData.MemoryBandwidth} Bytes");
+                Console.WriteLine($"   - pcie bandwidth : {adapter.PerformanceData.PCIEBandwidth} Bytes");
+                Console.WriteLine($"   - fan speed      : {adapter.PerformanceData.FanRPM} RPM");
+                Console.WriteLine($"   - power draw     : {adapter.PerformanceData.Power/10.0} %");
+                Console.WriteLine($"   - temperature    : {adapter.PerformanceData.Temperature / 10.0} *C");
+                Console.WriteLine($"   - power state ovr: {adapter.PerformanceData.PowerStateOverride}");
                 Console.WriteLine("");
 
                 Console.WriteLine("ID 63, Adapter Performance Data Capabilities:");
@@ -98,13 +111,18 @@ namespace Mixaill.HwInfo.D3DKMT.Demo
                 Console.WriteLine($"   - temp warning   : {adapter.PerformanceDataCapabilities.TemperatureWarning / 10.0} *C");
                 Console.WriteLine("");
 
-                Console.WriteLine("ID 70, WDDM 2.7 Capabilities:");
-                Console.WriteLine($"   - HAGS supported : {adapter.WddmCapabilities_27.HagsSupported}");
-                Console.WriteLine($"   - HAGS enabled   : {adapter.WddmCapabilities_27.HagsEnabled}");
+                Console.WriteLine("ID 64, GPU version   :");
+                Console.WriteLine($"   - adapter idx    : {adapter.GpuVersion.PhysicalAdapterIndex}");
+                Console.WriteLine($"   - bios version   : {adapter.GpuVersion.BiosVersion}");
+                Console.WriteLine($"   - gpu version    : {adapter.GpuVersion.GpuArchitecture}");
                 Console.WriteLine("");
 
-
-
+                Console.WriteLine("ID 70, WDDM 2.7 Capabilities:");
+                Console.WriteLine($"   - HwSch supported : {adapter.WddmCapabilities_27.HwSchSupported}");
+                Console.WriteLine($"   - HwSch enabled   : {adapter.WddmCapabilities_27.HwSchEnabled}");
+                Console.WriteLine($"   - HwSch enbl deflt: {adapter.WddmCapabilities_27.HwSchEnabledByDefault}");
+                Console.WriteLine($"   - idpdt vdpn vsync: {adapter.WddmCapabilities_27.IndependentVidPnVSyncControl}");
+                Console.WriteLine("");
 
                 adapter.Dispose();
             }

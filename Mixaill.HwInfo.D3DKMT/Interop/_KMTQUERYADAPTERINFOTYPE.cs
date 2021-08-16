@@ -3,7 +3,11 @@
 
 namespace Mixaill.HwInfo.D3DKMT.Interop
 {
-    public enum _D3DKMT_QUERYADAPTERINFOTYPE
+    /// <summary>
+    /// 
+    /// Reference: d3dkmthk.h::_KMTQUERYADAPTERINFOTYPE
+    /// </summary>
+    public enum _KMTQUERYADAPTERINFOTYPE: uint
     {
         //WDDM 1.0
         KMTQAITYPE_ADAPTERREGISTRYINFO      = 8 ,
@@ -13,12 +17,15 @@ namespace Mixaill.HwInfo.D3DKMT.Interop
         KMTQAITYPE_ADAPTERTYPE              = 15,
 
         //WDDM 2.0
+        KMTQAITYPE_WDDM_2_0_CAPS            = 24,
+        KMTQAITYPE_CPDRIVERNAME             = 26,
         KMTQAITYPE_PHYSICALADAPTERDEVICEIDS = 31,
         KMTQAITYPE_QUERY_GPUMMU_CAPS        = 34,
 
         //WDDM 2.4
         KMTQAITYPE_ADAPTERPERFDATA          = 62,
         KMTQAITYPE_ADAPTERPERFDATA_CAPS     = 63,
+        KMTQUITYPE_GPUVERSION               = 64,
 
         //WDDM 2.7
         KMTQAITYPE_WDDM_2_7_CAPS            = 70,

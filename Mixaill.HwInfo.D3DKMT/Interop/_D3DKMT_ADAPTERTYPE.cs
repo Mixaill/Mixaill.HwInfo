@@ -7,7 +7,11 @@ using Mixaill.HwInfo.D3DKMT.Helpers;
 
 namespace Mixaill.HwInfo.D3DKMT.Interop
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    /// <summary>
+    /// 
+    /// Reference: d3dkmthk.h::_D3DKMT_ADAPTERTYPE
+    /// </summary>
+    [StructLayout(LayoutKind.Sequential)]
     public struct _D3DKMT_ADAPTERTYPE
     {
         uint data;
@@ -32,5 +36,8 @@ namespace Mixaill.HwInfo.D3DKMT.Interop
         //WDDM 2.6
         public bool ComputeOnly => data.IsBitSet(11);
         public bool Prototype => data.IsBitSet(12);
+
+        //WDDM 2.9
+        public bool RuntimePowerManagement => data.IsBitSet(13);
     }
 }

@@ -5,9 +5,11 @@ using System.Runtime.InteropServices;
 
 namespace Mixaill.HwInfo.D3DKMT.Interop
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [StructLayout(LayoutKind.Sequential)]
     public struct _LUID
     {
-        public long luid;
+        public uint LowPart;
+
+        public int HighPart;
     }
 }

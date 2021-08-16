@@ -6,12 +6,16 @@ using System.Runtime.InteropServices;
 
 namespace Mixaill.HwInfo.D3DKMT.Interop
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    /// <summary>
+    /// 
+    /// Reference: d3dkmthk.h::_D3DKMT_QUERYADAPTERINFO
+    /// </summary>
+    [StructLayout(LayoutKind.Sequential)]
     public partial struct _D3DKMT_QUERYADAPTERINFO
     {
         public uint hAdapter;
 
-        public _D3DKMT_QUERYADAPTERINFOTYPE Type;
+        public _KMTQUERYADAPTERINFOTYPE Type;
 
         public IntPtr pPrivateDriverData;
 

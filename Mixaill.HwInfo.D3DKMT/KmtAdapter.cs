@@ -2,16 +2,15 @@
 // SPDX-License-Identifier: MIT
 
 using System;
-
+using System.Runtime.InteropServices;
 using Microsoft.Extensions.Logging;
+using Mixaill.HwInfo.D3DKMT.Helpers;
 
 namespace Mixaill.HwInfo.D3DKMT
 {
     public class KmtAdapter : IDisposable
     {
         #region Properties/General
-
-        public bool Initialized { get; private set; } = false;
 
         private readonly ILogger _logger = null;
 
@@ -22,19 +21,29 @@ namespace Mixaill.HwInfo.D3DKMT
 
         public Interop._D3DKMT_ADAPTERINFO AdapterInfo;
 
-        public Interop._D3DKMT_ADAPTERREGISTRYINFO AdapterRegistryInfo;
+        public uint PhysicalAdapterIndex { get; } = 0;
 
-        public Interop._D3DKMT_ADAPTERTYPE AdapterType;
+        public Interop._D3DKMT_ADAPTERREGISTRYINFO AdapterRegistryInfo => getAdapterRegistryInfo();
 
-        public Interop._D3DKMT_DEVICE_IDS DeviceIds;
+        public Interop._D3DKMT_ADAPTERTYPE AdapterType => getAdapterType();
 
-        public Interop._D3DKMT_DRIVERVERSION DriverVersion = Interop._D3DKMT_DRIVERVERSION.KMT_DRIVERVERSION_WDDM_1_0;
+        public Interop._D3DKMT_WDDM_2_0_CAPS WddmCapabilities_20 => getWddmCapabilities20();
 
-        public Interop._D3DKMT_GPUMMU_CAPS GpuMmuCapabilities;
+        public Interop._D3DKMT_CPDRIVERNAME ContentProtectionDriverName => getCPDriverName();
 
-        public Interop._D3DKMT_ADAPTER_PERFDATACAPS PerformanceDataCapabilities;
+        public Interop._D3DKMT_DEVICE_IDS DeviceIds => getDeviceIds();
 
-        public Interop._D3DKMT_WDDM_2_7_CAPS WddmCapabilities_27;
+        public Interop._QAI_DRIVERVERSION DriverVersion => getDriverVersion();
+
+        public Interop._D3DKMT_GPUMMU_CAPS GpuMmuCapabilities => getGpuMmuCapabilities();
+
+        public Interop._D3DKMT_ADAPTER_PERFDATA PerformanceData => getPerformanceData();
+
+        public Interop._D3DKMT_ADAPTER_PERFDATACAPS PerformanceDataCapabilities => getPerformanceDataCapabilities();
+
+        public Interop._D3DKMT_GPUVERSION GpuVersion => getGpuVersion();
+
+        public Interop._D3DKMT_WDDM_2_7_CAPS WddmCapabilities_27 => getWddmCapabilities27();
 
         #endregion
 
@@ -44,35 +53,15 @@ namespace Mixaill.HwInfo.D3DKMT
         public KmtAdapter(Interop._D3DKMT_ADAPTERINFO AdapterInfo, ILogger logger)
         {
             _logger = logger;
-            initialize(AdapterInfo);
+            this.AdapterInfo = AdapterInfo;
+            this.PhysicalAdapterIndex = 0;
         }
+
         public KmtAdapter(Interop._D3DKMT_ADAPTERINFO AdapterInfo, ILogger<KmtAdapter> logger)
         {
             _logger = logger;
-            initialize(AdapterInfo);
-        }
-
-        private void initialize(Interop._D3DKMT_ADAPTERINFO AdapterInfo)
-        {
             this.AdapterInfo = AdapterInfo;
-
-            try
-            {
-                AdapterRegistryInfo = getAdapterRegistryInfo();
-                DriverVersion = getDriverVersion();
-                AdapterType = getAdapterType();
-                DeviceIds = getDeviceIds();
-                GpuMmuCapabilities = getGpuMmuCapabilities();
-                PerformanceDataCapabilities = getPerformanceDataCapabilities();
-                WddmCapabilities_27 = getWddmCapabilities27();
-            }
-            catch (Exception ex)
-            {
-                _logger?.LogError(ex, "unknown error");
-                return;
-            }
-
-            Initialized = true;
+            this.PhysicalAdapterIndex = 0;
         }
 
         #endregion
@@ -93,131 +82,177 @@ namespace Mixaill.HwInfo.D3DKMT
         #region D3DKMT/Query Info
 
         //ID 8
-        private unsafe Interop._D3DKMT_ADAPTERREGISTRYINFO getAdapterRegistryInfo()
+        private Interop._D3DKMT_ADAPTERREGISTRYINFO getAdapterRegistryInfo()
         {
-            var result = new Interop._D3DKMT_ADAPTERREGISTRYINFO();
-            if (DriverVersion >= Interop._D3DKMT_DRIVERVERSION.KMT_DRIVERVERSION_WDDM_1_0)
-            {
-                queryAdapterInfo(Interop._D3DKMT_QUERYADAPTERINFOTYPE.KMTQAITYPE_ADAPTERREGISTRYINFO, (IntPtr)(&result), sizeof(Interop._D3DKMT_ADAPTERREGISTRYINFO));
-            }
-            return result;
+            return queryAdapterInfo<Interop._D3DKMT_ADAPTERREGISTRYINFO>(Interop._KMTQUERYADAPTERINFOTYPE.KMTQAITYPE_ADAPTERREGISTRYINFO);
         }
 
         //ID 13
-        private unsafe Interop._D3DKMT_DRIVERVERSION getDriverVersion()
+        private Interop._QAI_DRIVERVERSION getDriverVersion()
         {
-            var result = new Interop._D3DKMT_DRIVERVERSION();
-            if (DriverVersion >= Interop._D3DKMT_DRIVERVERSION.KMT_DRIVERVERSION_WDDM_1_0)
-            {
-                queryAdapterInfo(Interop._D3DKMT_QUERYADAPTERINFOTYPE.KMTQAITYPE_DRIVERVERSION, (IntPtr)(&result), sizeof(Interop._D3DKMT_DRIVERVERSION));
-            }
-            return result;
+            return queryAdapterInfo<Interop._QAI_DRIVERVERSION>(Interop._KMTQUERYADAPTERINFOTYPE.KMTQAITYPE_DRIVERVERSION);
         }
 
         //ID 15
-        private unsafe Interop._D3DKMT_ADAPTERTYPE getAdapterType()
+        private Interop._D3DKMT_ADAPTERTYPE getAdapterType()
         {
-            var result = new Interop._D3DKMT_ADAPTERTYPE();
-            if (DriverVersion >= Interop._D3DKMT_DRIVERVERSION.KMT_DRIVERVERSION_WDDM_1_2)
+            return queryAdapterInfo<Interop._D3DKMT_ADAPTERTYPE>(Interop._KMTQUERYADAPTERINFOTYPE.KMTQAITYPE_ADAPTERTYPE);
+        }
+
+        //ID 24
+        private Interop._D3DKMT_WDDM_2_0_CAPS getWddmCapabilities20()
+        {
+            if (DriverVersion >= Interop._QAI_DRIVERVERSION.KMT_DRIVERVERSION_WDDM_2_0)
             {
-                queryAdapterInfo(Interop._D3DKMT_QUERYADAPTERINFOTYPE.KMTQAITYPE_ADAPTERTYPE, (IntPtr)(&result), sizeof(Interop._D3DKMT_ADAPTERTYPE));
+                return queryAdapterInfo<Interop._D3DKMT_WDDM_2_0_CAPS>(Interop._KMTQUERYADAPTERINFOTYPE.KMTQAITYPE_WDDM_2_0_CAPS);
             }
-            return result;
+            return new Interop._D3DKMT_WDDM_2_0_CAPS();
+        }
+
+        //ID 26
+        private Interop._D3DKMT_CPDRIVERNAME getCPDriverName()
+        {
+            if (DriverVersion >= Interop._QAI_DRIVERVERSION.KMT_DRIVERVERSION_WDDM_2_0)
+            {
+                return queryAdapterInfo<Interop._D3DKMT_CPDRIVERNAME>(Interop._KMTQUERYADAPTERINFOTYPE.KMTQAITYPE_CPDRIVERNAME);
+            }
+            return new Interop._D3DKMT_CPDRIVERNAME();
         }
 
         //ID 31
-        private unsafe Interop._D3DKMT_DEVICE_IDS getDeviceIds()
+        private Interop._D3DKMT_DEVICE_IDS getDeviceIds()
         {
-            var result = new Interop._D3DKMT_QUERY_DEVICE_IDS();
-            if (DriverVersion >= Interop._D3DKMT_DRIVERVERSION.KMT_DRIVERVERSION_WDDM_2_0)
+            var result = new Interop._D3DKMT_QUERY_DEVICE_IDS() { PhysicalAdapterIndex = this.PhysicalAdapterIndex };
+            if (DriverVersion >= Interop._QAI_DRIVERVERSION.KMT_DRIVERVERSION_WDDM_2_0)
             {
-                queryAdapterInfo(Interop._D3DKMT_QUERYADAPTERINFOTYPE.KMTQAITYPE_PHYSICALADAPTERDEVICEIDS, (IntPtr)(&result), sizeof(Interop._D3DKMT_QUERY_DEVICE_IDS));
+                queryAdapterInfo(Interop._KMTQUERYADAPTERINFOTYPE.KMTQAITYPE_PHYSICALADAPTERDEVICEIDS, ref result);
             }
+
             return result.DeviceIds;
         }
 
         //ID 34
-        private unsafe Interop._D3DKMT_GPUMMU_CAPS getGpuMmuCapabilities()
+        private Interop._D3DKMT_GPUMMU_CAPS getGpuMmuCapabilities()
         {
-            var result = new Interop._D3DKMT_QUERY_GPUMMU_CAPS();
-            if (DriverVersion >= Interop._D3DKMT_DRIVERVERSION.KMT_DRIVERVERSION_WDDM_2_0)
+            var result = new Interop._D3DKMT_QUERY_GPUMMU_CAPS() { PhysicalAdapterIndex = this.PhysicalAdapterIndex };
+            if (DriverVersion >= Interop._QAI_DRIVERVERSION.KMT_DRIVERVERSION_WDDM_2_0)
             {
-                queryAdapterInfo(Interop._D3DKMT_QUERYADAPTERINFOTYPE.KMTQAITYPE_QUERY_GPUMMU_CAPS, (IntPtr)(&result), sizeof(Interop._D3DKMT_QUERY_GPUMMU_CAPS));
+                queryAdapterInfo(Interop._KMTQUERYADAPTERINFOTYPE.KMTQAITYPE_QUERY_GPUMMU_CAPS, ref result);
             }
             return result.Caps;
         }
 
 
         //ID 62
-        public unsafe (bool, Interop._D3DKMT_ADAPTER_PERFDATA) GetPerformanceData()
+        private Interop._D3DKMT_ADAPTER_PERFDATA getPerformanceData()
         {
-            var result_bool = false;
-            var result_struct = new Interop._D3DKMT_ADAPTER_PERFDATA();
+            var result = new Interop._D3DKMT_ADAPTER_PERFDATA() { PhysicalAdapterIndex = this.PhysicalAdapterIndex };
 
-            var s = sizeof(Interop._D3DKMT_ADAPTER_PERFDATA);
-            if (DriverVersion >= Interop._D3DKMT_DRIVERVERSION.KMT_DRIVERVERSION_WDDM_2_4)
+            if (DriverVersion >= Interop._QAI_DRIVERVERSION.KMT_DRIVERVERSION_WDDM_2_4)
             {
-                result_bool = queryAdapterInfo(Interop._D3DKMT_QUERYADAPTERINFOTYPE.KMTQAITYPE_ADAPTERPERFDATA, (IntPtr)(&result_struct), sizeof(Interop._D3DKMT_ADAPTER_PERFDATA));
+                queryAdapterInfo(Interop._KMTQUERYADAPTERINFOTYPE.KMTQAITYPE_ADAPTERPERFDATA, ref result);
             }
 
-            return (result_bool, result_struct);
+            return result;
         }
 
         //ID 63
-        private unsafe Interop._D3DKMT_ADAPTER_PERFDATACAPS getPerformanceDataCapabilities()
+        private Interop._D3DKMT_ADAPTER_PERFDATACAPS getPerformanceDataCapabilities()
         {
-            var result = new Interop._D3DKMT_ADAPTER_PERFDATACAPS();
-            if (DriverVersion >= Interop._D3DKMT_DRIVERVERSION.KMT_DRIVERVERSION_WDDM_2_4)
+            var result = new Interop._D3DKMT_ADAPTER_PERFDATACAPS() { PhysicalAdapterIndex = this.PhysicalAdapterIndex };
+            if (DriverVersion >= Interop._QAI_DRIVERVERSION.KMT_DRIVERVERSION_WDDM_2_4)
             {
-                queryAdapterInfo(Interop._D3DKMT_QUERYADAPTERINFOTYPE.KMTQAITYPE_ADAPTERPERFDATA_CAPS, (IntPtr)(&result), sizeof(Interop._D3DKMT_ADAPTER_PERFDATACAPS));
+                queryAdapterInfo(Interop._KMTQUERYADAPTERINFOTYPE.KMTQAITYPE_ADAPTERPERFDATA_CAPS, ref result);
+            }
+            return result;
+        }
+
+        //ID 64
+        private Interop._D3DKMT_GPUVERSION getGpuVersion()
+        {
+            var result = new Interop._D3DKMT_GPUVERSION() { PhysicalAdapterIndex = this.PhysicalAdapterIndex };
+            if (DriverVersion >= Interop._QAI_DRIVERVERSION.KMT_DRIVERVERSION_WDDM_2_4)
+            {
+                queryAdapterInfo(Interop._KMTQUERYADAPTERINFOTYPE.KMTQUITYPE_GPUVERSION, ref result);
             }
             return result;
         }
 
         //ID 70
-        private unsafe Interop._D3DKMT_WDDM_2_7_CAPS getWddmCapabilities27()
+        private Interop._D3DKMT_WDDM_2_7_CAPS getWddmCapabilities27()
         {
-            var result = new Interop._D3DKMT_WDDM_2_7_CAPS();
-            if (DriverVersion >= Interop._D3DKMT_DRIVERVERSION.KMT_DRIVERVERSION_WDDM_2_7)
+            if (DriverVersion >= Interop._QAI_DRIVERVERSION.KMT_DRIVERVERSION_WDDM_2_7)
             {
-                queryAdapterInfo(Interop._D3DKMT_QUERYADAPTERINFOTYPE.KMTQAITYPE_WDDM_2_7_CAPS, (IntPtr)(&result), sizeof(Interop._D3DKMT_WDDM_2_7_CAPS));
+                return queryAdapterInfo<Interop._D3DKMT_WDDM_2_7_CAPS>(Interop._KMTQUERYADAPTERINFOTYPE.KMTQAITYPE_WDDM_2_7_CAPS);
             }
-            return result;
+            return new Interop._D3DKMT_WDDM_2_7_CAPS();
         }
 
-        private unsafe bool queryAdapterInfo(Interop._D3DKMT_QUERYADAPTERINFOTYPE requestType, IntPtr buf, int size)
-        {
-            var adapterQuery = new Interop._D3DKMT_QUERYADAPTERINFO()
-            {
-                hAdapter = AdapterInfo.hAdapter,
-                Type = requestType,
-                pPrivateDriverData = buf,
-                PrivateDriverDataSize = (uint)size
-            };
+        #region queryAdapterInfo
 
-            var result = Interop.NtStatus.STATUS_SUCCESS;
+        private T queryAdapterInfo<T>(Interop._KMTQUERYADAPTERINFOTYPE requestType) where T: struct
+        {
+            int dataSize = 4;
+            if (!typeof(T).IsEnum)
+            {
+                dataSize = Marshal.SizeOf<T>();
+            }
+
+            var dataBuf = Marshal.AllocHGlobal(dataSize);
 
             try
             {
-                result = Interop.Gdi.D3DKMTQueryAdapterInfo(ref adapterQuery);
+                if (queryAdapterInfo(requestType, dataBuf, dataSize))
+                {
+                    return (T)InteropHelper.PointerToObj(typeof(T), dataBuf);
+                }
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(dataBuf);
+            }
+
+            return new T();
+        }
+
+        private void queryAdapterInfo<T>(Interop._KMTQUERYADAPTERINFOTYPE requestType, ref T requestStruct) where T: struct{
+            var bufferPtr = InteropHelper.ObjToPointer(requestStruct);
+
+            if(queryAdapterInfo(requestType, bufferPtr, Marshal.SizeOf<T>())){
+                requestStruct = InteropHelper.PointerToObj<T>(bufferPtr);
+                Marshal.FreeHGlobal(bufferPtr);
+            }
+        }
+
+        private bool queryAdapterInfo(Interop._KMTQUERYADAPTERINFOTYPE requestType, IntPtr dataBuf, int dataSize)
+        {
+            var queryStruct = new Interop._D3DKMT_QUERYADAPTERINFO()
+            {
+                hAdapter = AdapterInfo.hAdapter,
+                Type = requestType,
+                pPrivateDriverData = dataBuf,
+                PrivateDriverDataSize = (uint)dataSize
+            };
+
+            var queryResult = Interop.NtStatus.STATUS_SUCCESS;
+            try
+            {
+                queryResult = Interop.Gdi.D3DKMTQueryAdapterInfo(ref queryStruct);
             }
             catch (Exception ex)
             {
-                _logger?.LogError(ex, $"failed to get adapterInfo, hAdapter={AdapterInfo.hAdapter}, requestType={requestType}");
-                return false;
+                _logger?.LogError(ex, $"failed to query adapterInfo, hAdapter={AdapterInfo.hAdapter}, requestType={requestType}");
             }
 
-            switch (result)
+            if (queryResult != Interop.NtStatus.STATUS_SUCCESS)
             {
-                case Interop.NtStatus.STATUS_SUCCESS:
-                    return true;
-                case Interop.NtStatus.STATUS_OBJECT_NAME_NOT_FOUND:
-                    return false;
-                default:
-                    _logger?.LogWarning($"failed to get adapterInfo, hAdapter=0x{AdapterInfo.hAdapter:X8}, requestType={requestType}, result={result}");
-                    return false;
+                _logger?.LogWarning($"failed to get adapterInfo, hAdapter=0x{AdapterInfo.hAdapter:X8}, requestType={requestType}, result={queryResult}");
             }
+
+            return queryResult == Interop.NtStatus.STATUS_SUCCESS;
         }
+        
+        #endregion
 
         #endregion
 

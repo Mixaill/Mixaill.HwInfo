@@ -5,9 +5,16 @@ using System.Runtime.InteropServices;
 
 namespace Mixaill.HwInfo.D3DKMT.Interop
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    /// <summary>
+    /// 
+    /// Reference: d3dkmthk.h::_D3DKMT_CLOSEADAPTER
+    /// </summary>
+    [StructLayout(LayoutKind.Sequential)]
     public struct _D3DKMT_CLOSEADAPTER
     {
+        /// <summary>
+        /// Input: adapter handle
+        /// </summary>
         public uint hAdapter;
     }
 }
