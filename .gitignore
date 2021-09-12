@@ -1,7 +1,14 @@
 .vs/
 bin/
 obj/
+x64/
+Debug/
+Release/
 
 *.pubxml
 *.suo
 *.user
+*.tlog
+*.obj
+*.log
+*.vcxproj.filters
