@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mixaill.HwInfo.LowLevel", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mixaill.HwInfo.LowLevel.Demo", "Mixaill.HwInfo.LowLevel.Demo\Mixaill.HwInfo.LowLevel.Demo.csproj", "{25040443-A3FF-446B-AD3A-FAB798144ABF}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Mixaill.HwInfo.LowLevel.Native", "Mixaill.HwInfo.LowLevel.Native\Mixaill.HwInfo.LowLevel.Native.vcxproj", "{38E98CCF-7247-4CAD-90E8-F6F27DD3E407}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -125,6 +127,16 @@ Global
 		{25040443-A3FF-446B-AD3A-FAB798144ABF}.Release|x64.Build.0 = Release|Any CPU
 		{25040443-A3FF-446B-AD3A-FAB798144ABF}.Release|x86.ActiveCfg = Release|Any CPU
 		{25040443-A3FF-446B-AD3A-FAB798144ABF}.Release|x86.Build.0 = Release|Any CPU
+		{38E98CCF-7247-4CAD-90E8-F6F27DD3E407}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{38E98CCF-7247-4CAD-90E8-F6F27DD3E407}.Debug|x64.ActiveCfg = Debug|x64
+		{38E98CCF-7247-4CAD-90E8-F6F27DD3E407}.Debug|x64.Build.0 = Debug|x64
+		{38E98CCF-7247-4CAD-90E8-F6F27DD3E407}.Debug|x86.ActiveCfg = Debug|Win32
+		{38E98CCF-7247-4CAD-90E8-F6F27DD3E407}.Debug|x86.Build.0 = Debug|Win32
+		{38E98CCF-7247-4CAD-90E8-F6F27DD3E407}.Release|Any CPU.ActiveCfg = Release|Win32
+		{38E98CCF-7247-4CAD-90E8-F6F27DD3E407}.Release|x64.ActiveCfg = Release|x64
+		{38E98CCF-7247-4CAD-90E8-F6F27DD3E407}.Release|x64.Build.0 = Release|x64
+		{38E98CCF-7247-4CAD-90E8-F6F27DD3E407}.Release|x86.ActiveCfg = Release|Win32
+		{38E98CCF-7247-4CAD-90E8-F6F27DD3E407}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

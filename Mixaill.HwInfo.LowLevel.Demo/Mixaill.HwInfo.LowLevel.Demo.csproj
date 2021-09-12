@@ -26,6 +26,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Mixaill.HwInfo.LowLevel.Native\Mixaill.HwInfo.LowLevel.Native.vcxproj" />
     <ProjectReference Include="..\Mixaill.HwInfo.LowLevel\Mixaill.HwInfo.LowLevel.csproj" />
   </ItemGroup>
 
