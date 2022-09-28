@@ -25,5 +25,6 @@ namespace Mixaill.HwInfo.D3DKMT.Interop
         KMT_DRIVERVERSION_WDDM_2_8            = 2800,
         KMT_DRIVERVERSION_WDDM_2_9            = 2900,
         KMT_DRIVERVERSION_WDDM_3_0            = 3000,
+        KMT_DRIVERVERSION_WDDM_3_1            = 3100,
     }
 }

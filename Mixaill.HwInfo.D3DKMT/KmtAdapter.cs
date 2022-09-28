@@ -45,11 +45,17 @@ namespace Mixaill.HwInfo.D3DKMT
 
         public Interop._D3DKMT_WDDM_2_7_CAPS WddmCapabilities_27 => getWddmCapabilities27();
 
+        public Interop._D3DKMT_WDDM_2_9_CAPS WddmCapabilities_29 => getWddmCapabilities29();
+
+        public Interop._D3DKMT_WDDM_3_0_CAPS WddmCapabilities_30 => getWddmCapabilities30();
+
+        public Interop._D3DKMT_WDDM_3_1_CAPS WddmCapabilities_31 => getWddmCapabilities31();
+
         #endregion
 
 
         #region Ctor
-        
+
         public KmtAdapter(Interop._D3DKMT_ADAPTERINFO AdapterInfo, ILogger logger)
         {
             _logger = logger;
@@ -186,6 +192,36 @@ namespace Mixaill.HwInfo.D3DKMT
                 return queryAdapterInfo<Interop._D3DKMT_WDDM_2_7_CAPS>(Interop._KMTQUERYADAPTERINFOTYPE.KMTQAITYPE_WDDM_2_7_CAPS);
             }
             return new Interop._D3DKMT_WDDM_2_7_CAPS();
+        }
+
+        //ID 75
+        private Interop._D3DKMT_WDDM_2_9_CAPS getWddmCapabilities29()
+        {
+            if (DriverVersion >= Interop._QAI_DRIVERVERSION.KMT_DRIVERVERSION_WDDM_2_9)
+            {
+                return queryAdapterInfo<Interop._D3DKMT_WDDM_2_9_CAPS>(Interop._KMTQUERYADAPTERINFOTYPE.KMTQAITYPE_WDDM_2_9_CAPS);
+            }
+            return new Interop._D3DKMT_WDDM_2_9_CAPS();
+        }
+
+        //ID 77
+        private Interop._D3DKMT_WDDM_3_0_CAPS getWddmCapabilities30()
+        {
+            if (DriverVersion >= Interop._QAI_DRIVERVERSION.KMT_DRIVERVERSION_WDDM_3_0)
+            {
+                return queryAdapterInfo<Interop._D3DKMT_WDDM_3_0_CAPS>(Interop._KMTQUERYADAPTERINFOTYPE.KMTQAITYPE_WDDM_3_0_CAPS);
+            }
+            return new Interop._D3DKMT_WDDM_3_0_CAPS();
+        }
+
+        //ID 80
+        private Interop._D3DKMT_WDDM_3_1_CAPS getWddmCapabilities31()
+        {
+            if (DriverVersion >= Interop._QAI_DRIVERVERSION.KMT_DRIVERVERSION_WDDM_3_1)
+            {
+                return queryAdapterInfo<Interop._D3DKMT_WDDM_3_1_CAPS>(Interop._KMTQUERYADAPTERINFOTYPE.KMTQAITYPE_WDDM_3_1_CAPS);
+            }
+            return new Interop._D3DKMT_WDDM_3_1_CAPS();
         }
 
         #region queryAdapterInfo

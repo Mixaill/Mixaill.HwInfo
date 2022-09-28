@@ -29,6 +29,15 @@ namespace Mixaill.HwInfo.D3DKMT.Interop
 
         //WDDM 2.7
         KMTQAITYPE_WDDM_2_7_CAPS            = 70,
+
+        //WDDM 2.9
+        KMTQAITYPE_WDDM_2_9_CAPS            = 75,
+
+        //WDDM 3.0
+        KMTQAITYPE_WDDM_3_0_CAPS            = 77,
+
+        //WDDM 3.1
+        KMTQAITYPE_WDDM_3_1_CAPS            = 80,
     }
 }
 

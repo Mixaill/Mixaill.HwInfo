@@ -124,6 +124,23 @@ namespace Mixaill.HwInfo.D3DKMT.Demo
                 Console.WriteLine($"   - idpdt vdpn vsync: {adapter.WddmCapabilities_27.IndependentVidPnVSyncControl}");
                 Console.WriteLine("");
 
+                Console.WriteLine("ID 75, WDDM 2.9 Capabilities:");
+                Console.WriteLine($"   - Hw Scheduler state   : {adapter.WddmCapabilities_29.HwSchSupportState}");
+                Console.WriteLine($"   - Hw Scheduler enabled : {adapter.WddmCapabilities_29.HwSchEnabled}");
+                Console.WriteLine($"   - Self refresh memory  : {adapter.WddmCapabilities_29.SelfRefreshMemorySupported}");
+                Console.WriteLine("");
+
+                Console.WriteLine("ID 77, WDDM 3.0 Capabilities:");
+                Console.WriteLine($"   - Hw Flip state        : {adapter.WddmCapabilities_30.HwFlipQueueSupportState}");
+                Console.WriteLine($"   - Hw Flip enabled      : {adapter.WddmCapabilities_30.HwFlipQueueEnabled}");
+                Console.WriteLine($"   - Displayable supported: {adapter.WddmCapabilities_30.DisplayableSupported}");
+                Console.WriteLine("");
+
+                Console.WriteLine("ID 80, WDDM 3.1 Capabilities:");
+                Console.WriteLine($"   - Native GPU fence     : {adapter.WddmCapabilities_31.NativeGpuFenceSupported}");
+                Console.WriteLine("");
+
+
                 adapter.Dispose();
             }
 

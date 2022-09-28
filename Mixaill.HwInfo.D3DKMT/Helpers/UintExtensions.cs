@@ -10,6 +10,11 @@ namespace Mixaill.HwInfo.D3DKMT.Helpers
             return ((data >> pos) & 1) != 0;
         }
 
+        public static uint GetValue(this uint data, int pos, int len)
+        {
+            return (data >> pos) & ((1U<<len)-1);
+        }
+
         public static uint SetBit(this uint data, int pos, bool val)
         {
             if (val)
