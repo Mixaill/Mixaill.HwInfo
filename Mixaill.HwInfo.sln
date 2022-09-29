@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31205.134
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mixaill.HwInfo.SetupApi", "Mixaill.HwInfo.SetupApi\Mixaill.HwInfo.SetupApi.csproj", "{F76C8E31-06DE-4279-ACE7-DC5D84726D39}"
 EndProject
@@ -11,9 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mixaill.HwInfo.Vulkan.Demo"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mixaill.HwInfo.SetupApi.Demo", "Mixaill.HwInfo.SetupApi.Demo\Mixaill.HwInfo.SetupApi.Demo.csproj", "{2F1ED4BC-ED70-4BB1-8A59-00AEB5F7B740}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mixaill.HwInfo.D3DKMT", "Mixaill.HwInfo.D3DKMT\Mixaill.HwInfo.D3DKMT.csproj", "{3A5473A2-132B-470F-B89A-DFDEFD10C104}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mixaill.HwInfo.D3D", "Mixaill.HwInfo.D3D\Mixaill.HwInfo.D3D.csproj", "{3A5473A2-132B-470F-B89A-DFDEFD10C104}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mixaill.HwInfo.D3DKMT.Demo", "Mixaill.HwInfo.D3DKMT.Demo\Mixaill.HwInfo.D3DKMT.Demo.csproj", "{5E85E5A4-DD50-4AAF-9C97-8A3CF4659A6B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mixaill.HwInfo.D3D.Demo", "Mixaill.HwInfo.D3D.Demo\Mixaill.HwInfo.D3D.Demo.csproj", "{5E85E5A4-DD50-4AAF-9C97-8A3CF4659A6B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mixaill.HwInfo.LowLevel", "Mixaill.HwInfo.LowLevel\Mixaill.HwInfo.LowLevel.csproj", "{0E720B1A-B7D8-4219-B509-5119A52ED29D}"
 EndProject
