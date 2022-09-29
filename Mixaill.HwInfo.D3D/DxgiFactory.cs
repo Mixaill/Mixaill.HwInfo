@@ -15,8 +15,6 @@ namespace Mixaill.HwInfo.D3D
     {
         #region Properties
 
-        public bool Initialized { get; private set; } = false;
-
         private readonly ILogger _logger = null;
 
         private DXGI _dxgi { get; set; } = DXGI.GetApi();
@@ -38,16 +36,14 @@ namespace Mixaill.HwInfo.D3D
         }
 
 
-        #region Vulkan/EnumerateDevices
-
         public unsafe List<DxgiAdapter> GetAdapters()
         {
             var result = new List<DxgiAdapter>();
 
-            var factoryiid = IDXGIFactory1.Guid;
-            ComPtr<IDXGIFactory1> factory = default;
+            var factoryiid = IDXGIFactory4.Guid;
+            ComPtr<IDXGIFactory4> factory = default;
 
-            if (_dxgi.CreateDXGIFactory1(ref factoryiid, (void**)factory.GetAddressOf()) == 0)
+            if (_dxgi.CreateDXGIFactory2(0U, ref factoryiid, (void**)factory.GetAddressOf()) == 0)
             {
 
                 uint adapter_index = 0;
@@ -65,8 +61,6 @@ namespace Mixaill.HwInfo.D3D
 
             return result;
         }
-
-        #endregion
 
         #region IDisposable
 

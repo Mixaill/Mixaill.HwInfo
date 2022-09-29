@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright 2022, Mikhail Paulyshka
+// SPDX-License-Identifier: MIT
+
+using System;
 
 using Microsoft.Extensions.Logging;
 
@@ -131,7 +134,7 @@ namespace Mixaill.HwInfo.D3D.Demo
                 adapter.Dispose();
             }
 
-            Console.WriteLine("\n====       =====\n\n");
+            Console.WriteLine("\n\n\n");
         }
 
     }

@@ -26,6 +26,7 @@ namespace Mixaill.HwInfo.D3D.Demo
             Console.WriteLine($"{Assembly.GetEntryAssembly().GetName().Name} v{Assembly.GetEntryAssembly().GetName().Version}\n");
 
             DemoDXGI.Do(loggerFactory);
+            DemoD3D12.Do(loggerFactory);
             DemoKMT.Do(loggerFactory);
         }
     }
