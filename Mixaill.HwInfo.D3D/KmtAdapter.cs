@@ -6,7 +6,8 @@ using System.Runtime.InteropServices;
 
 using Microsoft.Extensions.Logging;
 
-using Mixaill.HwInfo.D3D.Helpers;
+using Mixaill.HwInfo.Common;
+using Mixaill.HwInfo.D3D.Interop;
 
 namespace Mixaill.HwInfo.D3D
 {
@@ -24,6 +25,12 @@ namespace Mixaill.HwInfo.D3D
         public Interop._D3DKMT_ADAPTERINFO AdapterInfo;
 
         public uint PhysicalAdapterIndex { get; } = 0;
+
+        #endregion
+
+        #region Properties/D3DKMT Info
+
+        public Interop._D3DKMT_SEGMENTSIZEINFO SegmentSize => getSegmentSize();
 
         public Interop._D3DKMT_ADAPTERREGISTRYINFO AdapterRegistryInfo => getAdapterRegistryInfo();
 
@@ -54,7 +61,6 @@ namespace Mixaill.HwInfo.D3D
         public Interop._D3DKMT_WDDM_3_1_CAPS WddmCapabilities_31 => getWddmCapabilities31();
 
         #endregion
-
 
         #region Ctor
 
@@ -88,6 +94,12 @@ namespace Mixaill.HwInfo.D3D
 
 
         #region D3DKMT/Query Info
+
+        //ID 3
+        private Interop._D3DKMT_SEGMENTSIZEINFO getSegmentSize()
+        {
+            return queryAdapterInfo<Interop._D3DKMT_SEGMENTSIZEINFO>(Interop._KMTQUERYADAPTERINFOTYPE.KMTQAITYPE_GETSEGMENTSIZE);
+        }
 
         //ID 8
         private Interop._D3DKMT_ADAPTERREGISTRYINFO getAdapterRegistryInfo()
@@ -242,7 +254,7 @@ namespace Mixaill.HwInfo.D3D
             {
                 if (queryAdapterInfo(requestType, dataBuf, dataSize))
                 {
-                    return (T)InteropHelper.PointerToObj(typeof(T), dataBuf);
+                    return dataBuf.ToObject<T>();
                 }
             }
             finally
@@ -254,10 +266,10 @@ namespace Mixaill.HwInfo.D3D
         }
 
         private void queryAdapterInfo<T>(Interop._KMTQUERYADAPTERINFOTYPE requestType, ref T requestStruct) where T: struct{
-            var bufferPtr = InteropHelper.ObjToPointer(requestStruct);
+            var bufferPtr = requestStruct.ToPointer();
 
             if(queryAdapterInfo(requestType, bufferPtr, Marshal.SizeOf<T>())){
-                requestStruct = InteropHelper.PointerToObj<T>(bufferPtr);
+                requestStruct = bufferPtr.ToObject<T>();
                 Marshal.FreeHGlobal(bufferPtr);
             }
         }
@@ -289,11 +301,102 @@ namespace Mixaill.HwInfo.D3D
 
             return queryResult == Interop.NtStatus.STATUS_SUCCESS;
         }
-        
-        #endregion
 
         #endregion
 
+        #endregion
+
+
+        #region D3DKMT/Query Video Memory
+
+        public _D3DKMT_QUERYVIDEOMEMORYINFO QueryVideoMemoryInfo(_D3DKMT_MEMORY_SEGMENT_GROUP memorySegmentGroup)
+        {
+            var queryStruct = new Interop._D3DKMT_QUERYVIDEOMEMORYINFO()
+            {
+                handle = 0U,
+                hAdapter = AdapterInfo.hAdapter,
+                MemorySegmentGroup = memorySegmentGroup,
+                PhysicalAdapterIndex = PhysicalAdapterIndex,
+            };
+
+            var queryResult = Interop.NtStatus.STATUS_SUCCESS;
+            try
+            {
+                queryResult = Interop.Gdi.D3DKMTQueryVideoMemoryInfo(ref queryStruct);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, $"failed to query adapterInfo, hAdapter={AdapterInfo.hAdapter}, segmentGroup={memorySegmentGroup}");
+            }
+
+            if (queryResult != Interop.NtStatus.STATUS_SUCCESS)
+            {
+                _logger?.LogWarning($"failed to get adapterInfo, hAdapter=0x{AdapterInfo.hAdapter:X8}, segmentGroup={memorySegmentGroup}, result={queryResult}");
+            }
+
+            return queryStruct;
+        }
+
+
+        #endregion
+
+        #region D3DKMT/Query Statistic
+        protected bool queryStatistics(ref _D3DKMT_QUERYSTATISTICS query)
+        {
+            var queryResult = Interop.NtStatus.STATUS_SUCCESS;
+            try
+            {
+                queryResult = Interop.Gdi.D3DKMTQueryStatistics(ref query);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, $"failed to query statistics, hAdapter={AdapterInfo.hAdapter}, type={query.Type}");
+            }
+
+            if (queryResult != Interop.NtStatus.STATUS_SUCCESS)
+            {
+                _logger?.LogWarning($"failed to get statistics, hAdapter=0x{AdapterInfo.hAdapter:X8}, type={query.Type}, result={queryResult}");
+            }
+
+            return queryResult == Interop.NtStatus.STATUS_SUCCESS;
+        }
+
+        public _D3DKMT_QUERYSTATISTICS_ADAPTER_INFORMATION QueryStatisticsAdapter()
+        {
+            var queryStruct = new _D3DKMT_QUERYSTATISTICS();
+            queryStruct.Type = _D3DKMT_QUERYSTATISTICS_TYPE.D3DKMT_QUERYSTATISTICS_ADAPTER;
+            queryStruct.Luid = AdapterInfo.AdapterLuid;
+            queryStruct.hProcess = 0U;
+
+            if (!queryStatistics(ref queryStruct))
+            {
+                return new _D3DKMT_QUERYSTATISTICS_ADAPTER_INFORMATION();
+            }
+
+            return queryStruct.QueryResult.AdapterInformation;
+        }
+
+        public _D3DKMT_QUERYSTATISTICS_SEGMENT_INFORMATION QueryStatisticsSegment(uint segmentNumber)
+        {
+            var queryStructSegment = new _D3DKMT_QUERYSTATISTICS_QUERY_SEGMENT();
+            queryStructSegment.SegmentId = segmentNumber;
+
+            var queryStruct = new _D3DKMT_QUERYSTATISTICS();
+            queryStruct.Type = _D3DKMT_QUERYSTATISTICS_TYPE.D3DKMT_QUERYSTATISTICS_SEGMENT;
+            queryStruct.Luid = AdapterInfo.AdapterLuid;
+            queryStruct.hProcess = 0U;
+            queryStruct.QuerySegment = queryStructSegment;
+
+            if (!queryStatistics(ref queryStruct))
+            {
+                return new _D3DKMT_QUERYSTATISTICS_SEGMENT_INFORMATION();
+            }
+
+            return queryStruct.QueryResult.SegmentInformation;
+        }
+
+
+        #endregion
 
         #region IDisposable
 

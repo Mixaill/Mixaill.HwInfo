@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿// Copyright 2021, Mikhail Paulyshka
+// SPDX-License-Identifier: MIT
 
-namespace Mixaill.HwInfo.LowLevel
+using System;
+
+namespace Mixaill.HwInfo.Common
 {
     public static class MathExtensions
     {

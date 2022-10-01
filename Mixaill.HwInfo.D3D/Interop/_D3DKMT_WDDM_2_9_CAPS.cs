@@ -3,7 +3,7 @@
 
 using System.Runtime.InteropServices;
 
-using Mixaill.HwInfo.D3D.Helpers;
+using Mixaill.HwInfo.Common;
 
 namespace Mixaill.HwInfo.D3D.Interop
 {

@@ -23,6 +23,12 @@ namespace Mixaill.HwInfo.D3D.Demo
                     continue;
                 }
 
+                Console.WriteLine("ID 3, Segment Size:");
+                Console.WriteLine($"   - dedicated video memory  : {adapter.SegmentSize.DedicatedVideoMemorySize / 1024.0 / 1024} MiB");
+                Console.WriteLine($"   - dedicated system memory : {adapter.SegmentSize.DedicatedSystemMemorySize / 1024.0 / 1024} MiB");
+                Console.WriteLine($"   - shared system memory    : {adapter.SegmentSize.SharedSystemMemorySize / 1024.0 / 1024}  MiB");
+                Console.WriteLine("");
+
                 Console.WriteLine("ID 8, Adapter Registry Info:");
                 Console.WriteLine($"   - adapter string : {adapter.AdapterRegistryInfo.AdapterString}");
                 Console.WriteLine($"   - bios string    : {adapter.AdapterRegistryInfo.BiosString}");
@@ -130,6 +136,42 @@ namespace Mixaill.HwInfo.D3D.Demo
                 Console.WriteLine($"   - Native GPU fence     : {adapter.WddmCapabilities_31.NativeGpuFenceSupported}");
                 Console.WriteLine("");
 
+                Console.WriteLine("Memory Segments");
+                var stats_adapter = adapter.QueryStatisticsAdapter();
+                for (uint seg_idx = 0; seg_idx < stats_adapter.NbSegments; seg_idx++)
+                {
+                    var seg_stats = adapter.QueryStatisticsSegment(seg_idx);
+
+                    Console.WriteLine($"  - Segment {seg_idx}");
+                    Console.WriteLine($"      - CommitLimit    : {seg_stats.CommitLimit} ({seg_stats.CommitLimit/1024.0/1024} MiB)");
+                    Console.WriteLine($"      - BytesCommitted : {seg_stats.BytesCommitted}  ({seg_stats.BytesCommitted / 1024.0 / 1024} MiB)");
+                    Console.WriteLine($"      - BytesResident  : {seg_stats.BytesResident}  ({seg_stats.BytesResident / 1024.0 / 1024} MiB)");
+                    Console.WriteLine($"      - Memory");
+                    Console.WriteLine($"          - TotalBytesEvicted : {seg_stats.Memory.TotalBytesEvicted} ({seg_stats.Memory.TotalBytesEvicted / 1024.0 / 1024} MiB)");
+                    Console.WriteLine($"          - AllocsCommitted   : {seg_stats.Memory.AllocsCommitted} ({seg_stats.Memory.AllocsCommitted / 1024.0 / 1024} MiB)");
+                    Console.WriteLine($"          - AllocsResident    : {seg_stats.Memory.AllocsResident} ({seg_stats.Memory.AllocsResident / 1024.0 / 1024} MiB)");
+                    Console.WriteLine($"      - TotalBytesEvictedByPriority");
+                    for(int i = 0; i< 5; i++)
+                    {
+                        Console.WriteLine($"          - Priority {i}  : {seg_stats.TotalBytesEvictedByPriority[i]} ({seg_stats.TotalBytesEvictedByPriority[i] / 1024.0 / 1024} MiB)");
+                    }
+                    Console.WriteLine($"      - SystemMemoryEndAddress: 0x{seg_stats.SystemMemoryEndAddress:X16}");
+                    Console.WriteLine($"      - Power Flags");
+                    Console.WriteLine($"          - PreservedDuringStandby  {seg_stats.PreservedDuringStandby}");
+                    Console.WriteLine($"          - PreservedDuringHibernate  {seg_stats.PreservedDuringHibernate}");
+                    Console.WriteLine($"          - PartiallyPreservedDuringHibernate  {seg_stats.PartiallyPreservedDuringHibernate}");
+
+                    Console.WriteLine($"      - Segment Properties");
+                    Console.WriteLine($"          - SystemMemory  {seg_stats.SystemMemory}");
+                    Console.WriteLine($"          - PopulatedByReservedDDRByFirmware  {seg_stats.PopulatedByReservedDDRByFirmware}");
+                    Console.WriteLine($"          - SegmentType  {seg_stats.SegmentType}");
+
+
+
+                    Console.WriteLine("");
+
+                }
+                Console.WriteLine("");
 
                 adapter.Dispose();
             }

@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Mixaill.HwInfo.Common;
 using Mixaill.HwInfo.SetupApi.Defines;
+
 
 namespace Mixaill.HwInfo.SetupApi
 {

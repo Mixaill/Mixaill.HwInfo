@@ -110,7 +110,7 @@ namespace Mixaill.HwInfo.Vulkan
             PhysicalDeviceMemoryProperties memoryProperties;
             _vk.GetPhysicalDeviceMemoryProperties(_vk_physicalDevice, out memoryProperties);
 
-            var searchMask = MemoryPropertyFlags.MemoryPropertyDeviceLocalBit | MemoryPropertyFlags.MemoryPropertyHostVisibleBit | MemoryPropertyFlags.MemoryPropertyHostCoherentBit;
+            var searchMask = MemoryPropertyFlags.DeviceLocalBit | MemoryPropertyFlags.HostVisibleBit | MemoryPropertyFlags.HostCoherentBit;
             for (int typeIdx = 0; typeIdx<memoryProperties.MemoryTypeCount; typeIdx++)
             {
                 var memoryType = memoryProperties.MemoryTypes[typeIdx];

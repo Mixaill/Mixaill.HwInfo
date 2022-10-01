@@ -40,4 +40,8 @@
     <PackageReference Include="System.Memory" Version="4.5.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Mixaill.HwInfo.Common\Mixaill.HwInfo.Common.csproj" />
+  </ItemGroup>
+
 </Project>

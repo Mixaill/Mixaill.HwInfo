@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mixaill.HwInfo.LowLevel.Dem
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Mixaill.HwInfo.LowLevel.Native", "Mixaill.HwInfo.LowLevel.Native\Mixaill.HwInfo.LowLevel.Native.vcxproj", "{38E98CCF-7247-4CAD-90E8-F6F27DD3E407}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mixaill.HwInfo.Common", "Mixaill.HwInfo.Common\Mixaill.HwInfo.Common.csproj", "{4D5A1E6F-7858-4946-9B81-012E4A9C34D3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -137,6 +139,18 @@ Global
 		{38E98CCF-7247-4CAD-90E8-F6F27DD3E407}.Release|x64.Build.0 = Release|x64
 		{38E98CCF-7247-4CAD-90E8-F6F27DD3E407}.Release|x86.ActiveCfg = Release|Win32
 		{38E98CCF-7247-4CAD-90E8-F6F27DD3E407}.Release|x86.Build.0 = Release|Win32
+		{4D5A1E6F-7858-4946-9B81-012E4A9C34D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D5A1E6F-7858-4946-9B81-012E4A9C34D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D5A1E6F-7858-4946-9B81-012E4A9C34D3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4D5A1E6F-7858-4946-9B81-012E4A9C34D3}.Debug|x64.Build.0 = Debug|Any CPU
+		{4D5A1E6F-7858-4946-9B81-012E4A9C34D3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4D5A1E6F-7858-4946-9B81-012E4A9C34D3}.Debug|x86.Build.0 = Debug|Any CPU
+		{4D5A1E6F-7858-4946-9B81-012E4A9C34D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D5A1E6F-7858-4946-9B81-012E4A9C34D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D5A1E6F-7858-4946-9B81-012E4A9C34D3}.Release|x64.ActiveCfg = Release|Any CPU
+		{4D5A1E6F-7858-4946-9B81-012E4A9C34D3}.Release|x64.Build.0 = Release|Any CPU
+		{4D5A1E6F-7858-4946-9B81-012E4A9C34D3}.Release|x86.ActiveCfg = Release|Any CPU
+		{4D5A1E6F-7858-4946-9B81-012E4A9C34D3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

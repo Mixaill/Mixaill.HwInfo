@@ -1,14 +1,32 @@
-﻿// Copyright 2021, Mikhail Paulyshka
+﻿// Copyright 2021-2022, Mikhail Paulyshka
 // SPDX-License-Identifier: MIT
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Mixaill.HwInfo.SetupApi
+namespace Mixaill.HwInfo.Common
 {
-    internal static class ByteArrayExtensions
+    public static class ByteArrayExtensions
     {
+        public static T ToObject<T>(this byte[] bytes)
+        {
+            int bufferSize = Marshal.SizeOf(typeof(T));
+            IntPtr bufferPtr = Marshal.AllocHGlobal(bufferSize);
+
+            try
+            {
+                Marshal.Copy(bytes, 0, bufferPtr, bufferSize);
+                return (T)Marshal.PtrToStructure(bufferPtr, typeof(T));
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(bufferPtr);
+            }
+        }
+
+
         public static List<string> SeparateRegMultiSz(this byte[] source)
         {
             var result = new List<string>();
@@ -26,7 +44,7 @@ namespace Mixaill.HwInfo.SetupApi
             return result;
         }
 
-        static bool IsStringSep(byte[] data, int index)
+        static bool IsStringSep(this byte[] data, int index)
         {
             for (int i = 0; i < 2; i++)
             {

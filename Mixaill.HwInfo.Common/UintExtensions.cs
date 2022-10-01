@@ -1,7 +1,7 @@
-﻿// Copyright 2021, Mikhail Paulyshka
+﻿// Copyright 2021-2022, Mikhail Paulyshka
 // SPDX-License-Identifier: MIT
 
-namespace Mixaill.HwInfo.D3D.Helpers
+namespace Mixaill.HwInfo.Common
 {
     public static class UintExtensions
     {

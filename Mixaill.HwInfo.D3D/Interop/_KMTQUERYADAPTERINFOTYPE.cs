@@ -10,6 +10,7 @@ namespace Mixaill.HwInfo.D3D.Interop
     public enum _KMTQUERYADAPTERINFOTYPE: uint
     {
         //WDDM 1.0
+        KMTQAITYPE_GETSEGMENTSIZE           = 3 ,
         KMTQAITYPE_ADAPTERREGISTRYINFO      = 8 ,
         KMTQAITYPE_DRIVERVERSION            = 13,
 

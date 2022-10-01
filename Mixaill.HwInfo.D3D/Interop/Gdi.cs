@@ -15,5 +15,11 @@ namespace Mixaill.HwInfo.D3D.Interop
 
         [DllImport("gdi32", ExactSpelling = true)]
         public static extern NtStatus D3DKMTQueryAdapterInfo(ref _D3DKMT_QUERYADAPTERINFO unnamedParam1);
+
+        [DllImport("gdi32", ExactSpelling = true)]
+        public static extern NtStatus D3DKMTQueryStatistics(ref _D3DKMT_QUERYSTATISTICS unnamedParam1);
+
+        [DllImport("gdi32", ExactSpelling = true)]
+        public static extern NtStatus D3DKMTQueryVideoMemoryInfo(ref _D3DKMT_QUERYVIDEOMEMORYINFO unnamedParam1);
     }
 }

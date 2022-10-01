@@ -44,4 +44,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Mixaill.HwInfo.Common\Mixaill.HwInfo.Common.csproj" />
+  </ItemGroup>
+
 </Project>
