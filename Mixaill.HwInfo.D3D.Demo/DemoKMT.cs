@@ -23,6 +23,11 @@ namespace Mixaill.HwInfo.D3D.Demo
                     continue;
                 }
 
+                Console.WriteLine("Properies");
+                Console.WriteLine($"   - host visible memory     : {adapter.HostVisibleMemory / 1024.0 / 1024} MiB");
+                Console.WriteLine($"   - resizable BAR in use    : {adapter.ResizableBarInUse}");
+                Console.WriteLine("");
+
                 Console.WriteLine("ID 3, Segment Size:");
                 Console.WriteLine($"   - dedicated video memory  : {adapter.SegmentSize.DedicatedVideoMemorySize / 1024.0 / 1024} MiB");
                 Console.WriteLine($"   - dedicated system memory : {adapter.SegmentSize.DedicatedSystemMemorySize / 1024.0 / 1024} MiB");
@@ -136,6 +141,22 @@ namespace Mixaill.HwInfo.D3D.Demo
                 Console.WriteLine($"   - Native GPU fence     : {adapter.WddmCapabilities_31.NativeGpuFenceSupported}");
                 Console.WriteLine("");
 
+                Console.WriteLine($"Memory Info");
+                Console.WriteLine($"    - local");
+                var vidmem_local = adapter.QueryVideoMemoryInfo(Interop._D3DKMT_MEMORY_SEGMENT_GROUP.D3DKMT_MEMORY_SEGMENT_GROUP_LOCAL);
+                Console.WriteLine($"        - budget                    : {vidmem_local.Budget} ({vidmem_local.Budget / 1024.0 / 1024} MiB)");
+                Console.WriteLine($"        - current usage             : {vidmem_local.CurrentUsage} ({vidmem_local.CurrentUsage / 1024.0 / 1024} MiB)");
+                Console.WriteLine($"        - current reservation       : {vidmem_local.CurrentReservation} ({vidmem_local.CurrentReservation / 1024.0 / 1024} MiB)");
+                Console.WriteLine($"        - available for reservation : {vidmem_local.AvailableForReservation} ({vidmem_local.AvailableForReservation / 1024.0 / 1024} MiB)");
+
+                var vidmem_nonlocal = adapter.QueryVideoMemoryInfo(Interop._D3DKMT_MEMORY_SEGMENT_GROUP.D3DKMT_MEMORY_SEGMENT_GROUP_NON_LOCAL);
+                Console.WriteLine($"    - non-local");
+                Console.WriteLine($"        - budget                    : {vidmem_nonlocal.Budget} ({vidmem_nonlocal.Budget / 1024.0 / 1024} MiB)");
+                Console.WriteLine($"        - current usage             : {vidmem_nonlocal.CurrentUsage} ({vidmem_nonlocal.CurrentUsage / 1024.0 / 1024} MiB)");
+                Console.WriteLine($"        - current reservation       : {vidmem_nonlocal.CurrentReservation} ({vidmem_nonlocal.CurrentReservation / 1024.0 / 1024} MiB)");
+                Console.WriteLine($"        - available for reservation : {vidmem_nonlocal.AvailableForReservation} ({vidmem_nonlocal.AvailableForReservation / 1024.0 / 1024} MiB)");
+                Console.WriteLine("");
+
                 Console.WriteLine("Memory Segments");
                 var stats_adapter = adapter.QueryStatisticsAdapter();
                 for (uint seg_idx = 0; seg_idx < stats_adapter.NbSegments; seg_idx++)
@@ -148,8 +169,8 @@ namespace Mixaill.HwInfo.D3D.Demo
                     Console.WriteLine($"      - BytesResident  : {seg_stats.BytesResident}  ({seg_stats.BytesResident / 1024.0 / 1024} MiB)");
                     Console.WriteLine($"      - Memory");
                     Console.WriteLine($"          - TotalBytesEvicted : {seg_stats.Memory.TotalBytesEvicted} ({seg_stats.Memory.TotalBytesEvicted / 1024.0 / 1024} MiB)");
-                    Console.WriteLine($"          - AllocsCommitted   : {seg_stats.Memory.AllocsCommitted} ({seg_stats.Memory.AllocsCommitted / 1024.0 / 1024} MiB)");
-                    Console.WriteLine($"          - AllocsResident    : {seg_stats.Memory.AllocsResident} ({seg_stats.Memory.AllocsResident / 1024.0 / 1024} MiB)");
+                    Console.WriteLine($"          - AllocsCommitted   : {seg_stats.Memory.AllocsCommitted}");
+                    Console.WriteLine($"          - AllocsResident    : {seg_stats.Memory.AllocsResident}");
                     Console.WriteLine($"      - TotalBytesEvictedByPriority");
                     for(int i = 0; i< 5; i++)
                     {

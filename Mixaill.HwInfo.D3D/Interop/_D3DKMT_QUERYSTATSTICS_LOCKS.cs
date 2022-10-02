@@ -1,5 +1,7 @@
-﻿using System.Runtime.InteropServices;
+﻿// Copyright 2022, Mikhail Paulyshka
+// SPDX-License-Identifier: MIT
 
+using System.Runtime.InteropServices;
 
 namespace Mixaill.HwInfo.D3D.Interop
 {

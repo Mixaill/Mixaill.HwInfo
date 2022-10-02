@@ -1,4 +1,7 @@
-﻿namespace Mixaill.HwInfo.D3D.Interop
+﻿// Copyright 2022, Mikhail Paulyshka
+// SPDX-License-Identifier: MIT
+
+namespace Mixaill.HwInfo.D3D.Interop
 {
     public enum _DXGK_FEATURE_SUPPORT : uint
     {

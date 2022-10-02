@@ -28,6 +28,9 @@ namespace Mixaill.HwInfo.D3D.Demo
             DemoDXGI.Do(loggerFactory);
             DemoD3D12.Do(loggerFactory);
             DemoKMT.Do(loggerFactory);
+
+            Console.WriteLine("\nPress any key to exit ...");
+            Console.ReadKey();
         }
     }
 }

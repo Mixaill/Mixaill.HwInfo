@@ -1,4 +1,7 @@
-﻿using System.Runtime.InteropServices;
+﻿// Copyright 2022, Mikhail Paulyshka
+// SPDX-License-Identifier: MIT
+
+using System.Runtime.InteropServices;
 
 using Mixaill.HwInfo.Common;
 

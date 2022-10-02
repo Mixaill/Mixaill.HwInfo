@@ -1,5 +1,11 @@
-﻿namespace Mixaill.HwInfo.D3D.Interop
+﻿// Copyright 2022, Mikhail Paulyshka
+// SPDX-License-Identifier: MIT
+
+namespace Mixaill.HwInfo.D3D.Interop
 {
+    /// <summary>
+    /// Reference: d3dkmthk.h::_D3DKMT_QUERYSTATISTICS_TYPE
+    /// </summary>
     public enum _D3DKMT_QUERYSTATISTICS_TYPE : uint
     {
         //WDDM 1.0

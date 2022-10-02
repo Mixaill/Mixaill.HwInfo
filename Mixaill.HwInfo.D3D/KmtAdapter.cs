@@ -1,4 +1,4 @@
-﻿// Copyright 2021, Mikhail Paulyshka
+﻿// Copyright 2021-2022, Mikhail Paulyshka
 // SPDX-License-Identifier: MIT
 
 using System;
@@ -59,6 +59,14 @@ namespace Mixaill.HwInfo.D3D
         public Interop._D3DKMT_WDDM_3_0_CAPS WddmCapabilities_30 => getWddmCapabilities30();
 
         public Interop._D3DKMT_WDDM_3_1_CAPS WddmCapabilities_31 => getWddmCapabilities31();
+
+        #endregion
+
+        #region Properties/Host Visible Memory
+
+        public ulong HostVisibleMemory => getHostVisibleMemory();
+
+        public bool ResizableBarInUse => HostVisibleMemory > (256 * 1024 * 1024);
 
         #endregion
 
@@ -395,6 +403,46 @@ namespace Mixaill.HwInfo.D3D
             return queryStruct.QueryResult.SegmentInformation;
         }
 
+
+        #endregion
+
+        #region Host Visible Memory
+
+        ulong getHostVisibleMemory()
+        {
+            ulong result = 0;
+
+            var infoAdapter = QueryStatisticsAdapter();
+            for(uint segmentIndex = 0; segmentIndex < infoAdapter.NbSegments; segmentIndex++)
+            {
+                var infoSegment = QueryStatisticsSegment(segmentIndex);
+
+                //skip invalid segments
+                if(infoSegment.CommitLimit == 0)
+                {
+                    continue;
+                }
+
+                //skip system memory
+                if (DriverVersion >= Interop._QAI_DRIVERVERSION.KMT_DRIVERVERSION_WDDM_2_9 && infoSegment.SystemMemory)
+                {
+                    continue;
+                }
+
+                //skip aperture segments
+                if (DriverVersion >= Interop._QAI_DRIVERVERSION.KMT_DRIVERVERSION_WDDM_3_1 && infoSegment.SegmentType != _D3DKMT_QUERYSTATISTICS_SEGMENT_TYPE.D3DKMT_QUERYSTATISTICS_SEGMENT_TYPE_MEMORY)
+                {
+                    continue;
+                }
+
+                if(result == 0UL || infoSegment.CommitLimit < result)
+                {
+                    result = infoSegment.CommitLimit;
+                }
+            }
+
+            return result;
+        }
 
         #endregion
 
