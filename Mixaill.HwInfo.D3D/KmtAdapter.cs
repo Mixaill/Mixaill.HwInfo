@@ -248,7 +248,7 @@ namespace Mixaill.HwInfo.D3D
 
         #region queryAdapterInfo
 
-        private T queryAdapterInfo<T>(Interop._KMTQUERYADAPTERINFOTYPE requestType) where T: struct
+        private T queryAdapterInfo<T>(Interop._KMTQUERYADAPTERINFOTYPE requestType) where T : struct
         {
             int dataSize = 4;
             if (!typeof(T).IsEnum)
@@ -273,10 +273,12 @@ namespace Mixaill.HwInfo.D3D
             return new T();
         }
 
-        private void queryAdapterInfo<T>(Interop._KMTQUERYADAPTERINFOTYPE requestType, ref T requestStruct) where T: struct{
+        private void queryAdapterInfo<T>(Interop._KMTQUERYADAPTERINFOTYPE requestType, ref T requestStruct) where T : struct
+        {
             var bufferPtr = requestStruct.ToPointer();
 
-            if(queryAdapterInfo(requestType, bufferPtr, Marshal.SizeOf<T>())){
+            if (queryAdapterInfo(requestType, bufferPtr, Marshal.SizeOf<T>()))
+            {
                 requestStruct = bufferPtr.ToObject<T>();
                 Marshal.FreeHGlobal(bufferPtr);
             }
@@ -410,15 +412,17 @@ namespace Mixaill.HwInfo.D3D
 
         ulong getHostVisibleMemory()
         {
-            ulong result = 0;
+            ulong result = 0U;
+
+            var vidmemSize = SegmentSize.DedicatedVideoMemorySize;
 
             var infoAdapter = QueryStatisticsAdapter();
-            for(uint segmentIndex = 0; segmentIndex < infoAdapter.NbSegments; segmentIndex++)
+            for (uint segmentIndex = 0; segmentIndex < infoAdapter.NbSegments; segmentIndex++)
             {
                 var infoSegment = QueryStatisticsSegment(segmentIndex);
 
                 //skip invalid segments
-                if(infoSegment.CommitLimit == 0)
+                if (infoSegment.CommitLimit == 0)
                 {
                     continue;
                 }
@@ -435,7 +439,13 @@ namespace Mixaill.HwInfo.D3D
                     continue;
                 }
 
-                if(result == 0UL || infoSegment.CommitLimit < result)
+                //skip segments which are > total VRAM
+                if (infoSegment.CommitLimit > vidmemSize)
+                {
+                    continue;
+                }
+
+                if (result == 0UL || infoSegment.CommitLimit < result)
                 {
                     result = infoSegment.CommitLimit;
                 }
@@ -449,12 +459,12 @@ namespace Mixaill.HwInfo.D3D
         #region IDisposable
 
         private bool disposedValue;
-        
+
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
             {
-                if (disposing){}
+                if (disposing) { }
 
                 adapterClose();
                 disposedValue = true;

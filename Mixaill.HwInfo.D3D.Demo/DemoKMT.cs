@@ -23,11 +23,6 @@ namespace Mixaill.HwInfo.D3D.Demo
                     continue;
                 }
 
-                Console.WriteLine("Properies");
-                Console.WriteLine($"   - host visible memory     : {adapter.HostVisibleMemory / 1024.0 / 1024} MiB");
-                Console.WriteLine($"   - resizable BAR in use    : {adapter.ResizableBarInUse}");
-                Console.WriteLine("");
-
                 Console.WriteLine("ID 3, Segment Size:");
                 Console.WriteLine($"   - dedicated video memory  : {adapter.SegmentSize.DedicatedVideoMemorySize / 1024.0 / 1024} MiB");
                 Console.WriteLine($"   - dedicated system memory : {adapter.SegmentSize.DedicatedSystemMemorySize / 1024.0 / 1024} MiB");
@@ -186,9 +181,11 @@ namespace Mixaill.HwInfo.D3D.Demo
                     Console.WriteLine($"          - SystemMemory  {seg_stats.SystemMemory}");
                     Console.WriteLine($"          - PopulatedByReservedDDRByFirmware  {seg_stats.PopulatedByReservedDDRByFirmware}");
                     Console.WriteLine($"          - SegmentType  {seg_stats.SegmentType}");
+                    Console.WriteLine("");
 
-
-
+                    Console.WriteLine("Properties");
+                    Console.WriteLine($"   - host visible memory     : {adapter.HostVisibleMemory / 1024.0 / 1024} MiB");
+                    Console.WriteLine($"   - resizable BAR in use    : {adapter.ResizableBarInUse}");
                     Console.WriteLine("");
 
                 }
