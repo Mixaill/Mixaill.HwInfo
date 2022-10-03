@@ -445,6 +445,12 @@ namespace Mixaill.HwInfo.D3D
                     continue;
                 }
 
+                //skip segments which are preserved during hibernate (in S4 dGPU are powered off)
+                if (DriverVersion >= Interop._QAI_DRIVERVERSION.KMT_DRIVERVERSION_WDDM_1_2 && infoSegment.PreservedDuringHibernate)
+                {
+                    continue;
+                }
+
                 if (result == 0UL || infoSegment.CommitLimit < result)
                 {
                     result = infoSegment.CommitLimit;
