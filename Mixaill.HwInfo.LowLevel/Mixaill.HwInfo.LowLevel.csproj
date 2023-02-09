@@ -27,9 +27,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\3rdparty\pciids\pci.ids" Link="pci.ids">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Compile Include="..\3rdparty\winring0\src_csharp\OpenLibSys.cs" Link="OpenLibSys.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\3rdparty\winring0\bin\WinRing0.dll" Link="WinRing0.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

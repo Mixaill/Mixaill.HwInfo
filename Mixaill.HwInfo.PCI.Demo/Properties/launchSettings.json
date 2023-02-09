@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Mixaill.HwInfo.PCI.Demo": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
