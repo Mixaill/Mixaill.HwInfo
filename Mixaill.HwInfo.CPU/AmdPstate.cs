@@ -11,6 +11,7 @@ namespace Mixaill.HwInfo.CPU
         #region Constants
 
         static UInt32 MSR_AMD_PSTATE_CUR_LIM   = 0xC001_0061;
+        static UInt32 MSR_AMD_PSTATE_STAT      = 0xC001_0063;
         static UInt32 MSR_AMD_PSTATE_DEF       = 0xC001_0064;
         static UInt32 MSR_AMD_PSTATE_HW_STATUS = 0xC001_0293;
 
@@ -45,6 +46,20 @@ namespace Mixaill.HwInfo.CPU
             {
                 result.CurPstateLimit = eax.GetValue(0, 3);
                 result.PstateMaxVal = eax.GetValue(4, 3);
+            }
+
+            return result;
+        }
+
+        public AmdPstateStat GetPStateStatus()
+        {
+            AmdPstateStat result = new AmdPstateStat();
+
+            UInt32 eax = 0U;
+            UInt32 edx = 0U;
+            if (ols.Rdmsr(MSR_AMD_PSTATE_STAT, ref eax, ref edx) != 0)
+            {
+                result.CurPstate = eax.GetValue(0, 3);
             }
 
             return result;

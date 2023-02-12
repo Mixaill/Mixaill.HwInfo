@@ -73,5 +73,17 @@ namespace Mixaill.HwInfo.CPU
         /// </summary>
         /// <returns></returns>
         public double CoreCOF => 200.0 * CpuFid / CpuDfsId;
+
+        public double CoreMultiplier => 2.0 * CpuFid / CpuDfsId;
+
+        /// <summary>
+        /// Core power in Watts
+        /// </summary>
+        public double CorePower => (1_550_000 - (6_250 * CpuVid)) / 10 * IddValue / Math.Pow(10, 2 + IddDiv) / 1_000;
+
+        /// <summary>
+        /// Core voltage in Volts
+        /// </summary>
+        public double CoreVoltage => (1_550_000 - (6_250 * CpuVid)) / 1_000_000.0;
     }
 }

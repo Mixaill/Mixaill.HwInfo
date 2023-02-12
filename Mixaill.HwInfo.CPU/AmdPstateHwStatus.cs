@@ -1,4 +1,6 @@
-﻿namespace Mixaill.HwInfo.CPU
+﻿using static OpenLibSys.Ols;
+
+namespace Mixaill.HwInfo.CPU
 {
 
     /// <summary>
@@ -27,5 +29,13 @@
         public uint CurHwPstate;
 
         public double CoreCOF => 200.0 * CurCpuFid / CurCpuDfsId;
+        
+        public double CoreMultiplier => 2.0 * CurCpuFid / CurCpuDfsId;
+
+
+        /// <summary>
+        /// Core voltage in Volts
+        /// </summary>
+        public double CoreVoltage => (1_550_000 - (6_250 * CurCpuVid)) / 1_000_000.0;
     }
 }
