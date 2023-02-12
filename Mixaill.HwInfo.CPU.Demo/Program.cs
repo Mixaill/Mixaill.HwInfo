@@ -1,19 +1,23 @@
-﻿namespace Mixaill.HwInfo.CPU.Demo
+﻿using Mixaill.HwInfo.CPU.AMD.SMN;
+using Mixaill.HwInfo.Common;
+using Mixaill.HwInfo.CPU.AMD.MSR;
+
+namespace Mixaill.HwInfo.CPU.Demo
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            var pc = new AmdPstate();
+            var pstate = new AmdPstate();
+            var smn = new SmnManager();
 
-            
-            var msr_pstate_lim = pc.GetPStateCurLim();
+            var msr_pstate_lim = pstate.GetPStateCurLim();
             Console.WriteLine("MSR_AMD_PSTATE_CUR_LIM / 0xC001_0061");
             Console.WriteLine($"  * CurPstateLimit: {msr_pstate_lim.CurPstateLimit}");
             Console.WriteLine($"  * PstateMaxVal  : {msr_pstate_lim.PstateMaxVal}");
             Console.WriteLine();
 
-            var msr_pstate_stat = pc.GetPStateStatus();
+            var msr_pstate_stat = pstate.GetPStateStatus();
             Console.WriteLine("MSR_AMD_PSTATE_STAT / 0xC001_0063");
             Console.WriteLine($"  * CurPstate: {msr_pstate_stat.CurPstate}");
             Console.WriteLine();
@@ -23,7 +27,7 @@
             for (uint i = 0; i <= Math.Min(AmdPstate.AMD_PSTATE_DEF_LIMIT, msr_pstate_lim.PstateMaxVal); i++)
             {
                 {
-                    var msr = pc.GetPStateDef(i);
+                    var msr = pstate.GetPStateDef(i);
                     Console.WriteLine($"  * State {i}:");
                     Console.WriteLine($"     * PstateEn      : {msr.PstateEn}");
                     Console.WriteLine($"     * CpuFid        : {msr.CpuFid}");
@@ -43,7 +47,7 @@
 
             Console.WriteLine("MSR_AMD_PSTATE_HW_STATUS / 0xC001_0293");
             {
-                var msr = pc.GetPStateHwStatus();
+                var msr = pstate.GetPStateHwStatus();
                 Console.WriteLine($"  * CurCpuFid      : {msr.CurCpuFid}");
                 Console.WriteLine($"  * CurCpuDfsId    : {msr.CurCpuDfsId}");
                 Console.WriteLine($"  * CurCpuVid      : {msr.CurCpuVid}");
@@ -54,6 +58,15 @@
                 Console.WriteLine($"  * CoreVoltage    : {msr.CoreVoltage}");
 
             }
+            Console.WriteLine();
+
+            Console.WriteLine("SMN_F17H_ZEN2_COF / 0x0005d2c4");
+            var zen2_cof = smn.GetZenCof();            
+            Console.WriteLine($"  * BoostRatio:" + zen2_cof.BoostRatio);
+            Console.WriteLine($"  * MinRatio  :" + zen2_cof.MinRatio);
+            Console.WriteLine($"   ----------");
+            Console.WriteLine($"  * CoreCOF   :" + zen2_cof.CoreCof);
+            Console.WriteLine();
 
             Console.ReadKey();
         }

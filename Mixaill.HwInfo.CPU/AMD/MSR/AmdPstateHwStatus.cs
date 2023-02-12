@@ -1,6 +1,6 @@
 ﻿using static OpenLibSys.Ols;
 
-namespace Mixaill.HwInfo.CPU
+namespace Mixaill.HwInfo.CPU.AMD.MSR
 {
 
     /// <summary>
@@ -29,13 +29,13 @@ namespace Mixaill.HwInfo.CPU
         public uint CurHwPstate;
 
         public double CoreCOF => 200.0 * CurCpuFid / CurCpuDfsId;
-        
+
         public double CoreMultiplier => 2.0 * CurCpuFid / CurCpuDfsId;
 
 
         /// <summary>
         /// Core voltage in Volts
         /// </summary>
-        public double CoreVoltage => (1_550_000 - (6_250 * CurCpuVid)) / 1_000_000.0;
+        public double CoreVoltage => (1_550_000 - 6_250 * CurCpuVid) / 1_000_000.0;
     }
 }

@@ -4,16 +4,16 @@ using Mixaill.HwInfo.Common;
 using Mixaill.HwInfo.LowLevel;
 
 
-namespace Mixaill.HwInfo.CPU
+namespace Mixaill.HwInfo.CPU.AMD.MSR
 {
     public class AmdPstate
     {
         #region Constants
 
-        static UInt32 MSR_AMD_PSTATE_CUR_LIM   = 0xC001_0061;
-        static UInt32 MSR_AMD_PSTATE_STAT      = 0xC001_0063;
-        static UInt32 MSR_AMD_PSTATE_DEF       = 0xC001_0064;
-        static UInt32 MSR_AMD_PSTATE_HW_STATUS = 0xC001_0293;
+        static uint MSR_AMD_PSTATE_CUR_LIM = 0xC001_0061;
+        static uint MSR_AMD_PSTATE_STAT = 0xC001_0063;
+        static uint MSR_AMD_PSTATE_DEF = 0xC001_0064;
+        static uint MSR_AMD_PSTATE_HW_STATUS = 0xC001_0293;
 
         public static uint AMD_PSTATE_DEF_LIMIT = 7U;
 
@@ -40,8 +40,8 @@ namespace Mixaill.HwInfo.CPU
         {
             AmdPstateCurLim result = new AmdPstateCurLim();
 
-            UInt32 eax = 0U;
-            UInt32 edx = 0U;
+            uint eax = 0U;
+            uint edx = 0U;
             if (ols.Rdmsr(MSR_AMD_PSTATE_CUR_LIM, ref eax, ref edx) != 0)
             {
                 result.CurPstateLimit = eax.GetValue(0, 3);
@@ -55,8 +55,8 @@ namespace Mixaill.HwInfo.CPU
         {
             AmdPstateStat result = new AmdPstateStat();
 
-            UInt32 eax = 0U;
-            UInt32 edx = 0U;
+            uint eax = 0U;
+            uint edx = 0U;
             if (ols.Rdmsr(MSR_AMD_PSTATE_STAT, ref eax, ref edx) != 0)
             {
                 result.CurPstate = eax.GetValue(0, 3);
@@ -74,8 +74,8 @@ namespace Mixaill.HwInfo.CPU
                 return result;
             }
 
-            UInt32 eax = 0U;
-            UInt32 edx = 0U;
+            uint eax = 0U;
+            uint edx = 0U;
             if (ols.Rdmsr(MSR_AMD_PSTATE_DEF + pstate_num, ref eax, ref edx) != 0)
             {
                 result.CpuFid = eax.GetValue(0, 8);
@@ -93,8 +93,8 @@ namespace Mixaill.HwInfo.CPU
         {
             AmdPstateHwStatus result = new AmdPstateHwStatus();
 
-            UInt32 eax = 0U;
-            UInt32 edx = 0U;
+            uint eax = 0U;
+            uint edx = 0U;
             if (ols.Rdmsr(MSR_AMD_PSTATE_HW_STATUS, ref eax, ref edx) != 0)
             {
                 result.CurCpuFid = eax.GetValue(0, 8);

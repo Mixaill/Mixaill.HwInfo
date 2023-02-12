@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
 
-namespace Mixaill.HwInfo.CPU
+namespace Mixaill.HwInfo.CPU.AMD.MSR
 {
 
 
@@ -66,7 +66,7 @@ namespace Mixaill.HwInfo.CPU
         /// </summary>
         public bool PstateEn;
 
-      
+
         /// <summary>
         /// Core current operating frequency in MHz.
         /// CoreCOF = (Core::X86::Msr::PStateDef[CpuFid[7:0]] / Core::X86::Msr::PStateDef[CpuDfsId]) * 200.
@@ -79,11 +79,11 @@ namespace Mixaill.HwInfo.CPU
         /// <summary>
         /// Core power in Watts
         /// </summary>
-        public double CorePower => (1_550_000 - (6_250 * CpuVid)) / 10 * IddValue / Math.Pow(10, 2 + IddDiv) / 1_000;
+        public double CorePower => (1_550_000 - 6_250 * CpuVid) / 10 * IddValue / Math.Pow(10, 2 + IddDiv) / 1_000;
 
         /// <summary>
         /// Core voltage in Volts
         /// </summary>
-        public double CoreVoltage => (1_550_000 - (6_250 * CpuVid)) / 1_000_000.0;
+        public double CoreVoltage => (1_550_000 - 6_250 * CpuVid) / 1_000_000.0;
     }
 }

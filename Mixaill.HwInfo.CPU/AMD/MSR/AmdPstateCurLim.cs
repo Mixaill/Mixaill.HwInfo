@@ -1,4 +1,4 @@
-﻿namespace Mixaill.HwInfo.CPU
+﻿namespace Mixaill.HwInfo.CPU.AMD.MSR
 {
     /// <summary>
     /// MSR C001_0061 
