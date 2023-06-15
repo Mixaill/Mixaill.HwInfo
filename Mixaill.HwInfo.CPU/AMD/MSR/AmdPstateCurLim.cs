@@ -1,4 +1,6 @@
-﻿namespace Mixaill.HwInfo.CPU.AMD.MSR
+﻿using Mixaill.HwInfo.Common;
+
+namespace Mixaill.HwInfo.CPU.AMD.MSR
 {
     /// <summary>
     /// MSR C001_0061 
@@ -23,5 +25,11 @@
         // than Core::X86::Msr::PStateCurLim[PstateMaxVal] leaves CurPstateLimit unchanged.
         /// </summary>
         public uint CurPstateLimit;
+
+        public AmdPstateCurLim(uint eax, uint edx)
+        {
+            CurPstateLimit = eax.GetValue(0, 3);
+            PstateMaxVal = eax.GetValue(4, 3);
+        }
     }
 }

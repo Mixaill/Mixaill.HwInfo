@@ -1,18 +1,15 @@
-﻿using System;
-
-using Mixaill.HwInfo.Common;
-using Mixaill.HwInfo.LowLevel;
-
+﻿using Mixaill.HwInfo.LowLevel;
 
 namespace Mixaill.HwInfo.CPU.AMD.MSR
 {
-    public class AmdPstate
+    public class AmdMsr
     {
         #region Constants
 
         static uint MSR_AMD_PSTATE_CUR_LIM = 0xC001_0061;
         static uint MSR_AMD_PSTATE_STAT = 0xC001_0063;
         static uint MSR_AMD_PSTATE_DEF = 0xC001_0064;
+        static uint MSR_AMD_PGMT_MISC = 0xC001_0292;
         static uint MSR_AMD_PSTATE_HW_STATUS = 0xC001_0293;
 
         public static uint AMD_PSTATE_DEF_LIMIT = 7U;
@@ -25,7 +22,7 @@ namespace Mixaill.HwInfo.CPU.AMD.MSR
 
         #endregion
 
-        public AmdPstate()
+        public AmdMsr()
         {
             ols = OlsWrapper.Instance();
         }
@@ -38,75 +35,68 @@ namespace Mixaill.HwInfo.CPU.AMD.MSR
         /// <returns></returns>
         public AmdPstateCurLim GetPStateCurLim()
         {
-            AmdPstateCurLim result = new AmdPstateCurLim();
-
             uint eax = 0U;
             uint edx = 0U;
             if (ols.Rdmsr(MSR_AMD_PSTATE_CUR_LIM, ref eax, ref edx) != 0)
             {
-                result.CurPstateLimit = eax.GetValue(0, 3);
-                result.PstateMaxVal = eax.GetValue(4, 3);
+                return new AmdPstateCurLim(eax, edx);
             }
 
-            return result;
+            return new AmdPstateCurLim();
         }
 
         public AmdPstateStat GetPStateStatus()
         {
-            AmdPstateStat result = new AmdPstateStat();
-
             uint eax = 0U;
             uint edx = 0U;
             if (ols.Rdmsr(MSR_AMD_PSTATE_STAT, ref eax, ref edx) != 0)
             {
-                result.CurPstate = eax.GetValue(0, 3);
+                return new AmdPstateStat(eax, edx);
             }
 
-            return result;
+            return new AmdPstateStat();
         }
 
         public AmdPstateDef GetPStateDef(uint pstate_num)
         {
-            AmdPstateDef result = new AmdPstateDef();
-
-            if (pstate_num > AMD_PSTATE_DEF_LIMIT)
+            if (pstate_num < AMD_PSTATE_DEF_LIMIT)
             {
-                return result;
+                uint eax = 0U;
+                uint edx = 0U;
+                if (ols.Rdmsr(MSR_AMD_PSTATE_DEF + pstate_num, ref eax, ref edx) != 0)
+                {
+                    return new AmdPstateDef(eax, edx);
+                }
             }
 
-            uint eax = 0U;
-            uint edx = 0U;
-            if (ols.Rdmsr(MSR_AMD_PSTATE_DEF + pstate_num, ref eax, ref edx) != 0)
-            {
-                result.CpuFid = eax.GetValue(0, 8);
-                result.CpuDfsId = eax.GetValue(8, 6);
-                result.CpuVid = eax.GetValue(14, 8);
-                result.IddValue = eax.GetValue(22, 8);
-                result.IddDiv = eax.GetValue(30, 2);
-                result.PstateEn = edx.GetValue(31, 1) != 0;
-            }
-
-            return result;
+            return new AmdPstateDef();
         }
 
-        public AmdPstateHwStatus GetPStateHwStatus()
-        {
-            AmdPstateHwStatus result = new AmdPstateHwStatus();
 
+        public AmdPmgtMisc GetPmgtMisc()
+        {
             uint eax = 0U;
             uint edx = 0U;
             if (ols.Rdmsr(MSR_AMD_PSTATE_HW_STATUS, ref eax, ref edx) != 0)
             {
-                result.CurCpuFid = eax.GetValue(0, 8);
-                result.CurCpuDfsId = eax.GetValue(8, 6);
-                result.CurCpuVid = eax.GetValue(14, 8);
-                result.CurHwPstate = eax.GetValue(22, 3);
+                return new AmdPmgtMisc(eax, edx);
             }
 
-            return result;
+            return new AmdPmgtMisc();
+        }
+
+        public AmdPstateHwStatus GetPStateHwStatus()
+        {
+            uint eax = 0U;
+            uint edx = 0U;
+            if (ols.Rdmsr(MSR_AMD_PSTATE_HW_STATUS, ref eax, ref edx) != 0)
+            {
+                return new AmdPstateHwStatus(eax, edx);
+            }
+
+            return new AmdPstateHwStatus();
         }
 
         #endregion
-
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Mixaill.HwInfo.CPU.AMD.MSR
+﻿using Mixaill.HwInfo.Common;
+
+namespace Mixaill.HwInfo.CPU.AMD.MSR
 {
     /// <summary>
     /// MSR C001_0063 
@@ -14,5 +16,10 @@
         /// Core::X86::Msr::PStateCtl[PstateCmd]. 0=P0, 1=P1, etc.). The value of this field is updated when the COF transitions to a new value associated with a P-state.
         /// </summary>
         public uint CurPstate;
+
+        public AmdPstateStat(uint eax, uint edx)
+        {
+            CurPstate = eax.GetValue(0, 3);
+        }
     }
 }

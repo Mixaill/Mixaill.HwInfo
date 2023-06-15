@@ -1,4 +1,4 @@
-﻿using static OpenLibSys.Ols;
+﻿using Mixaill.HwInfo.Common;
 
 namespace Mixaill.HwInfo.CPU.AMD.MSR
 {
@@ -37,5 +37,14 @@ namespace Mixaill.HwInfo.CPU.AMD.MSR
         /// Core voltage in Volts
         /// </summary>
         public double CoreVoltage => (1_550_000 - 6_250 * CurCpuVid) / 1_000_000.0;
+
+
+        public AmdPstateHwStatus(uint eax, uint edx)
+        {
+            CurCpuFid = eax.GetValue(0, 8);
+            CurCpuDfsId = eax.GetValue(8, 6);
+            CurCpuVid = eax.GetValue(14, 8);
+            CurHwPstate = eax.GetValue(22, 3);
+        }
     }
 }

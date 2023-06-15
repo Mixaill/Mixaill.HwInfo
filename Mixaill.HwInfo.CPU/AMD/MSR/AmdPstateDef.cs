@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mixaill.HwInfo.Common;
+using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
@@ -85,5 +86,15 @@ namespace Mixaill.HwInfo.CPU.AMD.MSR
         /// Core voltage in Volts
         /// </summary>
         public double CoreVoltage => (1_550_000 - 6_250 * CpuVid) / 1_000_000.0;
+
+        public AmdPstateDef(uint eax, uint edx)
+        {
+            CpuFid = eax.GetValue(0, 8);
+            CpuDfsId = eax.GetValue(8, 6);
+            CpuVid = eax.GetValue(14, 8);
+            IddValue = eax.GetValue(22, 8);
+            IddDiv = eax.GetValue(30, 2);
+            PstateEn = edx.GetValue(31, 1) != 0;
+        }
     }
 }
