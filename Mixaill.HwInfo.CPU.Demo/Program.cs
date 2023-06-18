@@ -1,6 +1,7 @@
 ﻿using Mixaill.HwInfo.CPU.AMD.SMN;
 using Mixaill.HwInfo.Common;
 using Mixaill.HwInfo.CPU.AMD.MSR;
+using Mixaill.HwInfo.CPU.AMD;
 
 namespace Mixaill.HwInfo.CPU.Demo
 {
@@ -8,16 +9,30 @@ namespace Mixaill.HwInfo.CPU.Demo
     {
         static void Main(string[] args)
         {
-            var msr = new AmdMsr();
-            var smn = new SmnManager();
+            var cpu = new AmdCpu(LowLevel.Backend.OLS.LowLevelOls.Instance);
 
-            var msr_pstate_lim = msr.GetPStateCurLim();
+            Console.WriteLine("\n///");
+            Console.WriteLine("/// CPUID");
+            Console.WriteLine("///\n");
+
+            Console.WriteLine("LEAF 0000_0001");
+            Console.WriteLine($"  * Family: {cpu.Cpuid.GetCpuFamily()} ({cpu.Cpuid.GetCpuFamily():X02}h)");
+            Console.WriteLine($"  * Model: {cpu.Cpuid.GetCpuModel()} ({cpu.Cpuid.GetCpuModel():X02}h)");
+            Console.WriteLine();
+
+
+            Console.WriteLine("\n///");
+            Console.WriteLine("/// MSR");
+            Console.WriteLine("///\n");
+
+
+            var msr_pstate_lim = cpu.MSR.GetPStateCurLim();
             Console.WriteLine("MSR_AMD_PSTATE_CUR_LIM / 0xC001_0061");
             Console.WriteLine($"  * CurPstateLimit: {msr_pstate_lim.CurPstateLimit}");
             Console.WriteLine($"  * PstateMaxVal  : {msr_pstate_lim.PstateMaxVal}");
             Console.WriteLine();
 
-            var msr_pstate_stat = msr.GetPStateStatus();
+            var msr_pstate_stat = cpu.MSR.GetPStateStatus();
             Console.WriteLine("MSR_AMD_PSTATE_STAT / 0xC001_0063");
             Console.WriteLine($"  * CurPstate: {msr_pstate_stat.CurPstate}");
             Console.WriteLine();
@@ -27,7 +42,7 @@ namespace Mixaill.HwInfo.CPU.Demo
             for (uint i = 0; i <= Math.Min(AmdMsr.AMD_PSTATE_DEF_LIMIT, msr_pstate_lim.PstateMaxVal); i++)
             {
                 {
-                    var msr_val = msr.GetPStateDef(i);
+                    var msr_val = cpu.MSR.GetPStateDef(i);
                     Console.WriteLine($"  * State {i}:");
                     Console.WriteLine($"     * PstateEn      : {msr_val.PstateEn}");
                     Console.WriteLine($"     * CpuFid        : {msr_val.CpuFid}");
@@ -47,7 +62,7 @@ namespace Mixaill.HwInfo.CPU.Demo
 
             Console.WriteLine("MSR_AMD_PMGT_MISC / 0xC001_0292");
             {
-                var msr_val = msr.GetPmgtMisc();
+                var msr_val = cpu.MSR.GetPmgtMisc();
                 Console.WriteLine($"  * CurHwPstateLimit     : {msr_val.CurHwPstateLimit}");
                 Console.WriteLine($"  * StartupPstate        : {msr_val.StartupPstate}");
                 Console.WriteLine($"  * DFPstateDis          : {msr_val.DFPstateDis}");
@@ -64,7 +79,7 @@ namespace Mixaill.HwInfo.CPU.Demo
 
             Console.WriteLine("MSR_AMD_PSTATE_HW_STATUS / 0xC001_0293");
             {
-                var msr_val = msr.GetPStateHwStatus();
+                var msr_val = cpu.MSR.GetPStateHwStatus();
                 Console.WriteLine($"  * CurCpuFid      : {msr_val.CurCpuFid}");
                 Console.WriteLine($"  * CurCpuDfsId    : {msr_val.CurCpuDfsId}");
                 Console.WriteLine($"  * CurCpuVid      : {msr_val.CurCpuVid}");
@@ -77,13 +92,25 @@ namespace Mixaill.HwInfo.CPU.Demo
             }
             Console.WriteLine();
 
+            Console.WriteLine("\n///");
+            Console.WriteLine("/// SMN");
+            Console.WriteLine("///\n");
+
             Console.WriteLine("SMN_F17H_ZEN2_COF / 0x0005d2c4");
-            var zen2_cof = smn.GetZenCof();            
+            var zen2_cof = cpu.SMN.GetZenCof();            
             Console.WriteLine($"  * BoostRatio:" + zen2_cof.BoostRatio);
             Console.WriteLine($"  * MinRatio  :" + zen2_cof.MinRatio);
             Console.WriteLine($"   ----------");
             Console.WriteLine($"  * CoreCOF   :" + zen2_cof.CoreCof);
             Console.WriteLine();
+
+            Console.WriteLine("\n///");
+            Console.WriteLine("/// SVI");
+            Console.WriteLine("///\n");
+
+            Console.WriteLine("TEL_PLANE0");
+            Console.WriteLine($"  * Voltage  :" + cpu.SVI.GetVoltage());
+            cpu.SVI.DebugVoltage();
 
             Console.ReadKey();
         }

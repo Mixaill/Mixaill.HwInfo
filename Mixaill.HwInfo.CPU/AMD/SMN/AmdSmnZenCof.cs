@@ -2,7 +2,7 @@
 
 namespace Mixaill.HwInfo.CPU.AMD.SMN
 {
-    public struct SmnZenCof
+    public struct AmdSmnZenCof
     {
         /// <summary>
         /// Max Boost ration in 0.25 of multiplier
@@ -16,7 +16,7 @@ namespace Mixaill.HwInfo.CPU.AMD.SMN
 
         public uint CoreCof => BoostRatio * 100 / 4;
 
-        public SmnZenCof(uint reg)
+        public AmdSmnZenCof(uint reg)
         {
             BoostRatio = reg.GetValue(17, 8);
             MinRatio = reg.GetValue(25, 7);
