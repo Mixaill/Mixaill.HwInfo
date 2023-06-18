@@ -79,8 +79,6 @@ namespace Mixaill.HwInfo.CPU.Demo
                 Console.WriteLine($"  * MaxDFCof             : {msr_val.MaxDFCof}");
                 Console.WriteLine($"  * CpbCap               : {msr_val.CpbCap}");
                 Console.WriteLine($"  * PC6En                : {msr_val.PC6En}");
-                Console.WriteLine($"    ----------");
-                Console.WriteLine($"  * DFVoltage            : {msr_val.DFVoltage} (possibly incorrect)");
 
             }
             Console.WriteLine();

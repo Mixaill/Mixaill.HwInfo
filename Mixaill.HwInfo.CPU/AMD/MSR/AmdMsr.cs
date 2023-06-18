@@ -45,7 +45,7 @@ namespace Mixaill.HwInfo.CPU.AMD.MSR
                 (var result, var eax, var edx) = m_lowLevel.MsrRead((uint)AmdMsrIds.MSR_AMD_PSTATE_DEF + pstate_num);
                 if (result)
                 {
-                    return new AmdPstateDef(eax, edx);
+                    return new AmdPstateDef(eax, edx, m_uarch);
                 }
             }
 

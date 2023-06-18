@@ -85,10 +85,30 @@ namespace Mixaill.HwInfo.CPU.AMD.MSR
         /// <summary>
         /// Core voltage in Volts
         /// </summary>
-        public double CoreVoltage => (1_550_000 - 6_250 * CpuVid) / 1_000_000.0;
-
-        public AmdPstateDef(uint eax, uint edx)
+        public double CoreVoltage
         {
+            get
+            {
+                switch (UArch)
+                {
+                    case AmdCpuUarch.Rembrandt:
+                    case AmdCpuUarch.Raphael:
+                        return 6_250 * CpuVid / 1_000_000.0;
+                    default:
+                        return (1_550_000 - 6_250 * CpuVid) / 1_000_000.0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Cpu microarchitecture
+        /// </summary>
+        private AmdCpuUarch UArch { get; }
+
+
+        public AmdPstateDef(uint eax, uint edx, AmdCpuUarch uarch)
+        {
+            UArch = uarch;
             CpuFid = eax.GetValue(0, 8);
             CpuDfsId = eax.GetValue(8, 6);
             CpuVid = eax.GetValue(14, 8);

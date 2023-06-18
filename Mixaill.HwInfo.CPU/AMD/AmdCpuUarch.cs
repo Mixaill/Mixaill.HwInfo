@@ -14,7 +14,8 @@ namespace Mixaill.HwInfo.CPU.AMD
         Naples,
 
         /// <summary>
-        /// 17h 31h
+        /// CPUID: 17h 31h
+        /// PPR  : 55803 (https://www.amd.com/system/files/TechDocs/55803-ppr-family-17h-model-31h-b0-processors.pdf)
         /// </summary>
         Rome,
 
@@ -44,12 +45,14 @@ namespace Mixaill.HwInfo.CPU.AMD
         Rembrandt,
 
         /// <summary>
-        /// 19h 50h
+        /// CPUID: 19h 50h
+        /// 
         /// </summary>
         Cezanne,
 
         /// <summary>
-        /// 19h 60h
+        /// CPUID: 19h 61h
+        /// PPR  : 56713 ( https://www.amd.com/system/files/TechDocs/56713-B1_3.05.zip )
         /// </summary>
         Raphael,
     }

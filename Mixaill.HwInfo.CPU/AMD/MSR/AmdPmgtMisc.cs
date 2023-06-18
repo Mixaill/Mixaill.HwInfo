@@ -50,10 +50,6 @@ namespace Mixaill.HwInfo.CPU.AMD.MSR
         /// </summary>
         public bool PC6En;
 
-        /// <summary>
-        /// DF voltage in Volts
-        /// </summary>
-        public double DFVoltage => (1_550_000 - 6_250 * CurDFVid) / 1_000_000.0;
 
         public AmdPmgtMisc(uint eax, uint edx)
         {
