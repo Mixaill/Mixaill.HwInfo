@@ -51,6 +51,8 @@ namespace Mixaill.HwInfo.CPU.AMD
                             return AmdCpuUarch.Renoir;
                         case 0x71:
                             return AmdCpuUarch.Matisse;
+                        case 0x90:
+                            return AmdCpuUarch.VanGogh;
                         default:
                             break;
                     }
