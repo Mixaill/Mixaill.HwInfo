@@ -27,7 +27,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\3rdparty\winring0\src_csharp\OpenLibSys.cs" Link="OpenLibSys.cs" />
+    <Compile Include="..\3rdparty\winring0\src_csharp\OpenLibSys.cs" Link="Backend\OLS\OpenLibSys.cs" />
   </ItemGroup>
 
   <ItemGroup>
