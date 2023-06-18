@@ -6,6 +6,7 @@ using Mixaill.HwInfo.LowLevel;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static OpenLibSys.Ols;
 
 namespace Mixaill.HwInfo.CPU.AMD
 {
@@ -26,9 +27,55 @@ namespace Mixaill.HwInfo.CPU.AMD
         {
             m_lowLevel = lowLevel;
             Cpuid = new Cpuid(m_lowLevel);
-            MSR = new AmdMsr(m_lowLevel);
+            MSR = new AmdMsr(m_lowLevel, GetUarch());
             SMN = new AmdSmn(m_lowLevel);
-            SVI = new AmdSvi(Cpuid, SMN);
+            SVI = new AmdSvi(GetUarch(), SMN);
+        }
+
+
+        public AmdCpuUarch GetUarch()
+        {
+            var family = Cpuid.GetCpuFamily();
+            var model = Cpuid.GetCpuModel();
+
+            switch (family)
+            {
+                case 0x17:
+                    switch (model)
+                    {
+                        case 0x01:
+                            return AmdCpuUarch.Naples;
+                        case 0x31:
+                            return AmdCpuUarch.Rome;
+                        case 0x60:
+                            return AmdCpuUarch.Renoir;
+                        case 0x71:
+                            return AmdCpuUarch.Matisse;
+                        default:
+                            break;
+                    }
+                    break;
+                case 0x19:
+                    switch (model)
+                    {
+                        case 0x01:
+                            return AmdCpuUarch.Milan;
+                        case 0x21:
+                            return AmdCpuUarch.Vermeer;
+                        case 0x40:
+                            return AmdCpuUarch.Rembrandt;
+                        case 0x50:
+                            return AmdCpuUarch.Cezanne;
+                        case 0x60:
+                            return AmdCpuUarch.Raphael;
+                        default:
+                            break;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return AmdCpuUarch.Unknown;
         }
     }
 }

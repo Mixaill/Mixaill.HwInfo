@@ -11,6 +11,14 @@ namespace Mixaill.HwInfo.CPU.Demo
         {
             var cpu = new AmdCpu(LowLevel.Backend.OLS.LowLevelOls.Instance);
 
+
+            Console.WriteLine("\n///");
+            Console.WriteLine("/// General");
+            Console.WriteLine("///\n");
+
+            Console.WriteLine($"  * uArch: {cpu.GetUarch()}");
+            Console.WriteLine();
+
             Console.WriteLine("\n///");
             Console.WriteLine("/// CPUID");
             Console.WriteLine("///\n");

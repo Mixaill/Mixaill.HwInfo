@@ -14,11 +14,14 @@ namespace Mixaill.HwInfo.CPU.AMD.MSR
 
         private ILowLevel m_lowLevel { get; } = null;
 
+        private AmdCpuUarch m_uarch { get; } = AmdCpuUarch.Unknown;
+
         #endregion
 
-        public AmdMsr(ILowLevel lowLevel)
+        public AmdMsr(ILowLevel lowLevel, AmdCpuUarch uarch)
         {
             m_lowLevel = lowLevel;
+            m_uarch = uarch;
         }
 
         #region MSR read
@@ -59,7 +62,7 @@ namespace Mixaill.HwInfo.CPU.AMD.MSR
         public AmdPstateHwStatus GetPStateHwStatus()
         {
             (var result, var eax, var edx) = m_lowLevel.MsrRead((uint)AmdMsrIds.MSR_AMD_PSTATE_HW_STATUS);
-            return result ? new AmdPstateHwStatus(eax, edx) : new AmdPstateHwStatus();
+            return result ? new AmdPstateHwStatus(eax, edx, m_uarch) : new AmdPstateHwStatus();
         }
 
         #endregion

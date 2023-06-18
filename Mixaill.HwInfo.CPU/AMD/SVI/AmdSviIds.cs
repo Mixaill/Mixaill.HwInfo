@@ -13,7 +13,8 @@ namespace Mixaill.HwInfo.CPU.AMD.SVI
     {
         UNKNOWN = 0x0,
 
-        ZEN_SVI_BASE = 0x0005A000,
+        ZEN_SVI_BASE  = 0x0005A000,
+        ZEN4_SVI_BASE = 0x0006F000,
 
         //Zen
         //Zen+

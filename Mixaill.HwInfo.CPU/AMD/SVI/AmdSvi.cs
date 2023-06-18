@@ -16,53 +16,39 @@ namespace Mixaill.HwInfo.CPU.AMD.SVI
     {
         #region Properties
 
-        private Cpuid m_cpuid { get; }
+        private AmdCpuUarch m_uarch { get; }
         private AmdSmn m_smn { get; }
 
         private AmdSviIds m_addr_core { get; } = AmdSviIds.UNKNOWN;
 
         #endregion
 
-        public AmdSvi(Cpuid cpuid, AmdSmn smn)
+        public AmdSvi(AmdCpuUarch uarch, AmdSmn smn)
         {
-            m_cpuid = cpuid;
+            m_uarch = uarch;
             m_smn = smn;
-            switch (m_cpuid.GetCpuFamily())
+            switch (m_uarch)
             {
-                case 0x17:
-                    switch (m_cpuid.GetCpuModel())
-                    {
-                        case 0x01: //Naples
-                            m_addr_core = AmdSviIds.F17H_M01H_SVI_TEL_PLANE0;
-                            break;
-                        case 0x31: //Rome, Castle Peak
-                            m_addr_core = AmdSviIds.F17H_M31H_SVI_TEL_PLANE0;
-                            break;
-                        case 0x60: //Renoir
-                            m_addr_core = AmdSviIds.F17H_M60H_SVI_TEL_PLANE0;
-                            break;
-                        case 0x71: //Matisse
-                            m_addr_core = AmdSviIds.F17H_M71H_SVI_TEL_PLANE0;
-                            break;
-                        default:
-                            break;
-                    }
+                case AmdCpuUarch.Naples:
+                    m_addr_core = AmdSviIds.F17H_M01H_SVI_TEL_PLANE0;
                     break;
-                case 0x19:
-                    switch (m_cpuid.GetCpuModel())
-                    {
-                        case 0x01: //Milan
-                            m_addr_core = AmdSviIds.F19H_M01H_SVI_TEL_PLANE0;
-                            break;
-                        case 0x21: //Vermeer
-                            m_addr_core = AmdSviIds.F19H_M21H_SVI_TEL_PLANE0;
-                            break;
-                        case 0x50: //Cezanne
-                            m_addr_core = AmdSviIds.F19H_M50H_SVI_TEL_PLANE0;
-                            break;
-                        default:
-                            break;
-                    }
+                case AmdCpuUarch.Rome:
+                    m_addr_core = AmdSviIds.F17H_M31H_SVI_TEL_PLANE0;
+                    break;
+                case AmdCpuUarch.Renoir:
+                    m_addr_core = AmdSviIds.F17H_M60H_SVI_TEL_PLANE0;
+                    break;
+                case AmdCpuUarch.Matisse:
+                    m_addr_core = AmdSviIds.F17H_M71H_SVI_TEL_PLANE0;
+                    break;
+                case AmdCpuUarch.Milan:
+                    m_addr_core = AmdSviIds.F19H_M01H_SVI_TEL_PLANE0;
+                    break;
+                case AmdCpuUarch.Vermeer:
+                    m_addr_core = AmdSviIds.F19H_M21H_SVI_TEL_PLANE0;
+                    break;
+                case AmdCpuUarch.Cezanne:
+                    m_addr_core = AmdSviIds.F19H_M50H_SVI_TEL_PLANE0;
                     break;
                 default:
                     break;
