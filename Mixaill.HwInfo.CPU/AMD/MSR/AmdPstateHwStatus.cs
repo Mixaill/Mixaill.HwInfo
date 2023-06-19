@@ -45,8 +45,10 @@ namespace Mixaill.HwInfo.CPU.AMD.MSR
             {
                 switch (UArch)
                 {
+                    case AmdCpuUarch.VanGogh:
                     case AmdCpuUarch.Rembrandt:
                     case AmdCpuUarch.Raphael:
+                    case AmdCpuUarch.Phoenix:
                         return 6_250 * CurCpuVid / 1_000_000.0;
                     default:
                         return (1_550_000 - 6_250 * CurCpuVid) / 1_000_000.0;

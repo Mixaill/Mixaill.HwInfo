@@ -80,5 +80,13 @@ namespace Mixaill.HwInfo.CPU.AMD
         ///   * AMD Ryzen 9 7950X
         /// </summary>
         Raphael,
+
+        /// <summary>
+        /// CPUID   : 19h 74h
+        /// PPR     : not available
+        /// Products:
+        ///   * AMD Ryzen 9 7940H
+        /// </summary>
+        Phoenix
     }
 }

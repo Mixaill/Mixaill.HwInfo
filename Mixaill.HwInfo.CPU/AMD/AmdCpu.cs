@@ -70,6 +70,8 @@ namespace Mixaill.HwInfo.CPU.AMD
                             return AmdCpuUarch.Cezanne;
                         case 0x61:
                             return AmdCpuUarch.Raphael;
+                        case 0x74:
+                            return AmdCpuUarch.Phoenix;
                         default:
                             break;
                     }

@@ -114,8 +114,9 @@ namespace Mixaill.HwInfo.CPU.Demo
             Console.WriteLine("/// SVI");
             Console.WriteLine("///\n");
 
-            Console.WriteLine("TEL_PLANE0");
-            Console.WriteLine($"  * Voltage  :" + cpu.SVI.GetVoltage());
+            Console.WriteLine($"  * VoltageCore :" + cpu.SVI.GetVoltageCore());
+            Console.WriteLine($"  * VoltageSoC  :" + cpu.SVI.GetVoltageSoc());
+
             cpu.SVI.DebugVoltage();
 
             Console.ReadKey();
